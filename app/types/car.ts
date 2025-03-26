@@ -8,14 +8,3 @@ export interface Car {
     version: number;
 }
 
-export interface CarChangeLog {
-    id: number;
-    changes: {
-        field: keyof Car;
-        oldValue: any;
-        newValue: any;
-    }[];
-    changedAt: Date;
-    changedBy: string;
-    version: number;
-}

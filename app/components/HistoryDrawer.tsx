@@ -10,23 +10,25 @@ import {
     DrawerHeader,
     DrawerTitle,
 } from '@/components/ui/drawer';
-import { Car, CarChangeLog } from '../types/car';
+import { ChangeLog } from '../hooks/useChangeTracking';
 
-interface HistoryDrawerProps {
+interface HistoryDrawerProps<T extends { id: number; version: number }> {
     isOpen: boolean;
     onOpenChange: (open: boolean) => void;
     selectedRowId: number | null;
-    rowData: Car[];
-    changeLog: { [key: number]: CarChangeLog[] };
+    rowData: T[];
+    changeLog: { [key: number]: ChangeLog<T>[] };
+    getFieldDisplayName?: (field: keyof T) => string;
 }
 
-export const HistoryDrawer: React.FC<HistoryDrawerProps> = ({
+export const HistoryDrawer = <T extends { id: number; version: number }>({
     isOpen,
     onOpenChange,
     selectedRowId,
     rowData,
-    changeLog
-}) => {
+    changeLog,
+    getFieldDisplayName = (field) => String(field)
+}: HistoryDrawerProps<T>): React.ReactElement => {
     const renderChangeLog = () => {
         if (!selectedRowId) return null;
 
@@ -54,7 +56,9 @@ export const HistoryDrawer: React.FC<HistoryDrawerProps> = ({
                                         <div className="space-y-1">
                                             {log.changes.map((change, changeIndex) => (
                                                 <div key={changeIndex} className="flex items-center">
-                                                    <span className="font-medium">{change.field}</span>
+                                                    <span className="font-medium">
+                                                        {getFieldDisplayName(change.field)}
+                                                    </span>
                                                     <span className="mx-2 text-gray-400">→</span>
                                                     <span>{String(change.newValue)}</span>
                                                 </div>
@@ -69,7 +73,7 @@ export const HistoryDrawer: React.FC<HistoryDrawerProps> = ({
                                             Previous Values:
                                             {log.changes.map((change, changeIndex) => (
                                                 <span key={changeIndex} className="ml-2 font-mono">
-                                                    {change.field}: {String(change.oldValue)}
+                                                    {getFieldDisplayName(change.field)}: {String(change.oldValue)}
                                                 </span>
                                             ))}
                                         </div>

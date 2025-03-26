@@ -1,6 +1,7 @@
 // 📄 utils/agGridModules.ts
 import { ModuleRegistry } from 'ag-grid-community';
 import {
+    AllCommunityModule,
     ClientSideRowModelModule,
     SelectEditorModule,
     TextEditorModule,
@@ -10,11 +11,14 @@ import {
     ValidationModule,
     NumberEditorModule,
     CellStyleModule,
-    CustomFilterModule
+    CustomFilterModule,
+    PaginationModule,
+    CsvExportModule,
 } from 'ag-grid-community';
 
 export const registerAgGridModules = () => {
     ModuleRegistry.registerModules([
+        AllCommunityModule,
         ClientSideRowModelModule,
         SelectEditorModule,
         TextEditorModule,
@@ -24,6 +28,8 @@ export const registerAgGridModules = () => {
         ValidationModule,
         NumberEditorModule,
         CellStyleModule,
-        CustomFilterModule
+        CustomFilterModule,
+        PaginationModule,
+        CsvExportModule
     ]);
 };

@@ -14,15 +14,3 @@ export interface Kit {
     dieNumber: string,
     version: number;
 }
-
-export interface KitChangeLog {
-    id: number;
-    changes: {
-        field: keyof Kit;
-        oldValue: any;
-        newValue: any;
-    }[];
-    changedAt: Date;
-    changedBy: string;
-    version: number;
-}

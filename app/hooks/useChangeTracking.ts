@@ -1,15 +1,41 @@
-// 📄 hooks/useChangeTracking.ts
 import { useState, useCallback } from 'react';
-import { Car, CarChangeLog } from '../types/car';
 import { createChangeLogEntry } from '../utils/changeLogHelpers';
+import { CellValueChangedEvent } from 'ag-grid-community';
 
-export const useChangeTracking = (initialData: Car[]) => {
-    const [rowData, setRowData] = useState<Car[]>(initialData);
-    const [localChanges, setLocalChanges] = useState<{ [key: number]: { field: keyof Car, oldValue: any, newValue: any }[] }>({});
-    const [changeLog, setChangeLog] = useState<{ [key: number]: CarChangeLog[] }>({});
+export interface ChangeLog<T> {
+    id: number;
+    version: number;
+    changes: Change<T>[];
+    changedAt: Date;
+    changedBy: string;
+}
 
-    const onCellValueChanged = useCallback((event: any) => {
+export interface Change<T> {
+    field: keyof T;
+    oldValue: any;
+    newValue: any;
+}
+
+export interface DataSnapshot<T> {
+    date: Date;
+    data: T[];
+}
+
+export const useChangeTracking = <T extends { id: number; version: number }>(initialData: T[]) => {
+    const [rowData, setRowData] = useState<T[]>(initialData);
+    const [localChanges, setLocalChanges] = useState<{ [key: number]: { field: keyof T, oldValue: any, newValue: any }[] }>({});
+    const [changeLog, setChangeLog] = useState<{ [key: number]: ChangeLog<T>[] }>({});
+    const [snapshots, setSnapshots] = useState<DataSnapshot<T>[]>([
+        {
+            date: new Date(0), // Initial snapshot at the beginning of time
+            data: initialData.map(row => ({ ...row }))
+        }
+    ]);
+
+    const onCellValueChanged = useCallback((event: CellValueChangedEvent<T, keyof T>) => {
         const { data, column, oldValue, newValue } = event;
+
+        if (!data) return;
 
         if (oldValue !== newValue) {
             setLocalChanges(prev => ({
@@ -17,7 +43,7 @@ export const useChangeTracking = (initialData: Car[]) => {
                 [data.id]: [
                     ...(prev[data.id] || []),
                     {
-                        field: column.getColId() as keyof Car,
+                        field: column.getColId() as keyof T,
                         oldValue,
                         newValue
                     }
@@ -35,7 +61,6 @@ export const useChangeTracking = (initialData: Car[]) => {
         const updatedRowData = rowData.map(row => {
             const rowChanges = localChanges[row.id];
             if (rowChanges) {
-                // TODO: In actual app, this is where you'd call your backend API
                 const changeLogEntry = createChangeLogEntry(row.id, rowChanges, row.version);
 
                 setChangeLog(prev => ({
@@ -43,10 +68,25 @@ export const useChangeTracking = (initialData: Car[]) => {
                     [row.id]: [...(prev[row.id] || []), changeLogEntry]
                 }));
 
-                return { ...row, version: row.version + 1 };
+                return {
+                    ...row,
+                    ...Object.fromEntries(
+                        rowChanges.map(change => [change.field, change.newValue])
+                    ),
+                    version: row.version + 1
+                };
             }
             return row;
         });
+
+        // Save a snapshot when changes are saved
+        setSnapshots(prev => [
+            ...prev,
+            {
+                date: new Date(),
+                data: updatedRowData.map(row => ({ ...row }))
+            }
+        ]);
 
         setRowData(updatedRowData);
         setLocalChanges({});
@@ -54,12 +94,47 @@ export const useChangeTracking = (initialData: Car[]) => {
         alert('Changes saved successfully!');
     }, [rowData, localChanges]);
 
+    const getDataForDate = useCallback((date: Date): T[] => {
+        // Sort snapshots and change logs to ensure chronological order
+        const sortedSnapshots = [...snapshots].sort((a, b) => a.date.getTime() - b.date.getTime());
+
+        // Find the most recent snapshot before or on the given date
+        const relevantSnapshot = sortedSnapshots.reduce((latest, current) =>
+            current.date <= date ? current : latest
+        );
+
+        // Create a deep copy of the snapshot data
+        const historicalData = relevantSnapshot.data.map(row => ({ ...row }));
+
+        // Apply change logs for each row up to the specified date
+        Object.keys(changeLog).forEach(rowId => {
+            const parsedRowId = parseInt(rowId);
+            const rowChangeLogs = changeLog[parsedRowId]
+                .filter(log => log.changedAt <= date)
+                .sort((a, b) => a.changedAt.getTime() - b.changedAt.getTime());
+
+            const rowIndex = historicalData.findIndex(r => r.id === parsedRowId);
+            if (rowIndex !== -1) {
+                // Revert the row to its state at the specified date
+                rowChangeLogs.forEach(log => {
+                    log.changes.forEach(change => {
+                        (historicalData[rowIndex] as any)[change.field] = change.newValue;
+                    });
+                });
+            }
+        });
+
+        return historicalData;
+    }, [snapshots, changeLog]);
+
     return {
         rowData,
         localChanges,
         changeLog,
+        snapshots,
         onCellValueChanged,
         saveChanges,
+        getDataForDate,
         setRowData,
     };
 };

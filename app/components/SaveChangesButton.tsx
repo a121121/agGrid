@@ -2,17 +2,16 @@
 import React from 'react';
 import { Button } from '@/components/ui/button';
 import { Save } from 'lucide-react';
-import { Car } from '../types/car';
 
-interface SaveChangesButtonProps {
-    localChanges: { [key: number]: { field: keyof Car, oldValue: any, newValue: any }[] };
+interface SaveChangesButtonProps<T> {
+    localChanges: { [key: number]: { field: keyof T, oldValue: any, newValue: any }[] };
     saveChanges: () => void;
 }
 
-export const SaveChangesButton: React.FC<SaveChangesButtonProps> = ({
+export const SaveChangesButton = <T,>({
     localChanges,
     saveChanges
-}) => {
+}: SaveChangesButtonProps<T>): React.ReactElement => {
     const pendingChangesCount = Object.values(localChanges).reduce(
         (total, changes) => total + changes.length,
         0
