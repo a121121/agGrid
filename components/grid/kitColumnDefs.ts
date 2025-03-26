@@ -1,6 +1,6 @@
 // 📄 components/grid/kitColumnDefs.ts
 import { ColDef } from 'ag-grid-community';
-import { Kit } from '../../types/kit';
+import { Kit } from '@/types/kit';
 
 export const getKitColumnDefs = (
     HistoryButtonRenderer: any,

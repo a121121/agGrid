@@ -10,15 +10,18 @@ import { SaveChangesButton } from './SaveChangesButton';
 import { HistoryDrawer } from './HistoryDrawer';
 import { CalendarDrawer } from './CalendarDrawer';
 import { useChangeTracking } from '../hooks/useChangeTracking';
-import { INITIAL_KIT_DATA } from './constants/kitData';
-import { registerAgGridModules } from '../utils/agGridModules';
+import { INITIAL_KIT_DATA } from '../constants/kitData';
+import { generateKitData } from '@/lib/generateKitData';
+import { registerAgGridModules } from '@/lib/agGridModules';
 import { Button } from '@/components/ui/button';
-import { Kit } from '../types/kit';
+import { Kit } from '@/types/kit';
 import { getKitColumnDefs } from './grid/kitColumnDefs';
+import KitDashboard from './KitDashboard';
 
 // Register modules once (make sure CsvExportModule is included)
 registerAgGridModules();
 
+const testData = generateKitData(500); // Generates 100 valid Kit objects
 const GridComponent = () => {
     const {
         rowData,
@@ -27,7 +30,7 @@ const GridComponent = () => {
         onCellValueChanged,
         saveChanges,
         getDataForDate,
-    } = useChangeTracking<Kit>(INITIAL_KIT_DATA);
+    } = useChangeTracking<Kit>(testData);
 
     const [isHistoryDrawerOpen, setIsHistoryDrawerOpen] = useState(false);
     const [isCalendarDrawerOpen, setIsCalendarDrawerOpen] = useState(false);
@@ -55,6 +58,9 @@ const GridComponent = () => {
 
     return (
         <div className="container mx-auto mt-10 space-y-4">
+            <div>
+                <KitDashboard kits={testData} />
+            </div>
             <div className="flex justify-between items-center">
                 <h2 className="text-xl font-semibold text-gray-800">Kit Management</h2>
                 <div className="flex space-x-2">
@@ -87,7 +93,7 @@ const GridComponent = () => {
                         editable: true,
                         suppressMovable: true,
                         resizable: true,
-                        minWidth: 150,
+                        minWidth: 200,
                     }}
                     getRowId={(params) => params.data.id.toString()}
                     suppressHorizontalScroll={false}

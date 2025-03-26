@@ -1,5 +1,5 @@
 import { useState, useCallback } from 'react';
-import { createChangeLogEntry } from '../utils/changeLogHelpers';
+import { createChangeLogEntry } from '../lib/changeLogHelpers';
 import { CellValueChangedEvent } from 'ag-grid-community';
 
 export interface ChangeLog<T> {
@@ -95,7 +95,7 @@ export const useChangeTracking = <T extends { id: number; version: number }>(ini
     }, [rowData, localChanges]);
 
     const getDataForDate = useCallback((date: Date): T[] => {
-        // Sort snapshots and change logs to ensure chronological order
+        // Sort snapshots to ensure chronological order
         const sortedSnapshots = [...snapshots].sort((a, b) => a.date.getTime() - b.date.getTime());
 
         // Find the most recent snapshot before or on the given date
@@ -106,16 +106,22 @@ export const useChangeTracking = <T extends { id: number; version: number }>(ini
         // Create a deep copy of the snapshot data
         const historicalData = relevantSnapshot.data.map(row => ({ ...row }));
 
-        // Apply change logs for each row up to the specified date
+        // Apply change logs for each row up to and including the specified date
         Object.keys(changeLog).forEach(rowId => {
             const parsedRowId = parseInt(rowId);
             const rowChangeLogs = changeLog[parsedRowId]
-                .filter(log => log.changedAt <= date)
+                .filter(log => {
+                    // Compare dates without time components
+                    const logDate = new Date(log.changedAt);
+                    logDate.setHours(0, 0, 0, 0);
+                    const queryDate = new Date(date);
+                    queryDate.setHours(0, 0, 0, 0);
+                    return logDate <= queryDate;
+                })
                 .sort((a, b) => a.changedAt.getTime() - b.changedAt.getTime());
 
             const rowIndex = historicalData.findIndex(r => r.id === parsedRowId);
             if (rowIndex !== -1) {
-                // Revert the row to its state at the specified date
                 rowChangeLogs.forEach(log => {
                     log.changes.forEach(change => {
                         (historicalData[rowIndex] as any)[change.field] = change.newValue;
@@ -126,7 +132,6 @@ export const useChangeTracking = <T extends { id: number; version: number }>(ini
 
         return historicalData;
     }, [snapshots, changeLog]);
-
     return {
         rowData,
         localChanges,

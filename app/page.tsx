@@ -1,6 +1,6 @@
 "use client";
 
-import GridComponent from "./components/GridComponent";
+import GridComponent from "../components/GridComponent";
 
 export default function Home() {
   return (

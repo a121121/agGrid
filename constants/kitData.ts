@@ -1,5 +1,5 @@
 // 📄 constants/kitData.ts
-import { Kit } from '../../types/kit';
+import { Kit } from '@/types/kit';
 
 export const INITIAL_KIT_DATA: Kit[] = [
     {
