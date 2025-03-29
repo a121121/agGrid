@@ -83,20 +83,20 @@ const KitDashboard: React.FC<KitDashboardProps> = ({ kits }) => {
             <div className="grid gap-4 md:grid-cols-3 lg:grid-cols-3">
                 <Card>
                     <CardHeader className="flex flex-row items-center justify-between">
-                        <CardTitle className="text-sm">Total Kits</CardTitle>
+                        <CardTitle className="text-sm">Total Parts</CardTitle>
                         <PackageIcon className="h-4 w-4 text-muted-foreground" />
                     </CardHeader>
                     <CardContent>
                         <div className="text-2xl font-bold">{kitAnalytics.totalItems}</div>
                         <p className="text-xs text-muted-foreground">
-                            Total kit inventory
+                            Total kit Items
                         </p>
                     </CardContent>
                 </Card>
 
                 <Card>
                     <CardHeader className="flex flex-row items-center justify-between">
-                        <CardTitle className="text-sm">MCL Kits</CardTitle>
+                        <CardTitle className="text-sm">MCL Achieved</CardTitle>
                         <CheckCircle2Icon className="h-4 w-4 text-muted-foreground" />
                     </CardHeader>
                     <CardContent>
@@ -109,13 +109,13 @@ const KitDashboard: React.FC<KitDashboardProps> = ({ kits }) => {
 
                 <Card>
                     <CardHeader className="flex flex-row items-center justify-between">
-                        <CardTitle className="text-sm">Remaining Kits</CardTitle>
+                        <CardTitle className="text-sm">Remaining Parts</CardTitle>
                         <FactoryIcon className="h-4 w-4 text-muted-foreground" />
                     </CardHeader>
                     <CardContent>
                         <div className="text-2xl font-bold">{kitAnalytics.nonMCLCount}</div>
                         <p className="text-xs text-muted-foreground">
-                            Kits not yet in MCL
+                            Parts not yet on MCL
                         </p>
                     </CardContent>
                 </Card>
@@ -144,12 +144,12 @@ const KitDashboard: React.FC<KitDashboardProps> = ({ kits }) => {
                             series={[
                                 {
                                     data: chartData.kitName.map(item => item.mclCount),
-                                    label: 'MCL Kits',
+                                    label: 'MCL Achieved',
                                     color: '#10b981'
                                 },
                                 {
                                     data: chartData.kitName.map(item => item.nonMclCount),
-                                    label: 'Non-MCL Kits',
+                                    label: 'Pending',
                                     color: '#3b82f6'
                                 }
                             ]}
@@ -165,6 +165,7 @@ const KitDashboard: React.FC<KitDashboardProps> = ({ kits }) => {
                         <CardTitle>Manufacturer Breakdown (Non-MCL)</CardTitle>
                     </CardHeader>
                     <CardContent className="h-full -mt-10">
+
                         <BarChart
                             xAxis={[
                                 {
@@ -180,7 +181,7 @@ const KitDashboard: React.FC<KitDashboardProps> = ({ kits }) => {
                             series={[
                                 {
                                     data: chartData.manufacturer.map(item => item.value),
-                                    label: 'Number of Kits',
+                                    label: 'Number of Parts',
                                     color: '#8b5cf6'
                                 },
                             ]}

@@ -10,19 +10,22 @@ import { SaveChangesButton } from './SaveChangesButton';
 import { HistoryDrawer } from './HistoryDrawer';
 import { CalendarDrawer } from './CalendarDrawer';
 import { useChangeTracking } from '../hooks/useChangeTracking';
-import { INITIAL_KIT_DATA } from '../constants/kitData';
-import { generateKitData } from '@/lib/generateKitData';
 import { registerAgGridModules } from '@/lib/agGridModules';
 import { Button } from '@/components/ui/button';
 import { Kit } from '@/types/kit';
 import { getKitColumnDefs } from './grid/kitColumnDefs';
-import KitDashboard from './KitDashboard';
 
 // Register modules once (make sure CsvExportModule is included)
 registerAgGridModules();
 
-const testData = generateKitData(500); // Generates 100 valid Kit objects
-const GridComponent = () => {
+interface GridComponentProps {
+    rowData?: Kit[]; // Make rowData optional and accept filtered data
+}
+
+const GridComponent: React.FC<GridComponentProps> = ({ rowData: initialRowData }) => {
+    // Use provided rowData or generate test data if not provided
+    const testData = initialRowData || [];
+
     const {
         rowData,
         localChanges,
@@ -49,20 +52,14 @@ const GridComponent = () => {
         if (gridRef.current) {
             gridRef.current.api.exportDataAsCsv({
                 fileName: 'kit-data-export.csv',
-                // You can add additional export options here if needed
-                // processCellCallback: (params) => { /* format cells */ },
-                // columnKeys: ['specific', 'columns'], // export only specific columns
             });
         }
     };
 
     return (
-        <div className="container mx-auto mt-10 space-y-4">
-            <div>
-                <KitDashboard kits={testData} />
-            </div>
+        <div className="container mx-auto space-y-4">
             <div className="flex justify-between items-center">
-                <h2 className="text-xl font-semibold text-gray-800">Kit Management</h2>
+                <h2 className="text-xl font-semibold text-gray-800">Kit Data Grid</h2>
                 <div className="flex space-x-2">
                     <Button
                         variant="outline"
@@ -101,8 +98,7 @@ const GridComponent = () => {
                     pagination={true}
                     paginationPageSize={10}
                     paginationPageSizeSelector={[10, 25, 50]}
-                    // Add CSV export configuration
-                    suppressExcelExport={true} // Disable Excel export if you only want CSV
+                    suppressExcelExport={true}
                 />
             </div>
 

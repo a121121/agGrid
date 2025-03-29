@@ -1,11 +1,12 @@
 "use client";
 
-import GridComponent from "../components/GridComponent";
+// import GridComponent from "../components/GridComponent";
+import KitManager from "./kitManager/page";
 
 export default function Home() {
   return (
     <div suppressHydrationWarning>
-      <GridComponent />
+      hehe
     </div>
   );
 }
