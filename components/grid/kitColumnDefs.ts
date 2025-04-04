@@ -115,7 +115,7 @@ export const getKitColumnDefs = (
             headerName: "History",
             field: "id",
             flex: 0,
-            sortable: false,
+            sortable: true,
             filter: false,
             editable: false,
             cellRenderer: HistoryButtonRenderer,

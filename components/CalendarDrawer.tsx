@@ -1,5 +1,5 @@
 // 📄 components/CalendarDrawer.tsx
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import {
     Drawer,
@@ -19,7 +19,7 @@ import { ColDef } from 'ag-grid-community';
 interface CalendarDrawerProps<T extends { id: number }> {
     isOpen: boolean;
     onOpenChange: (open: boolean) => void;
-    getDataForDate: (date: Date) => T[];
+    getDataForDate: (date: Date) => Promise<T[]>;
     getColumnDefs: (HistoryButtonRenderer: any, editable: boolean, showHistory: boolean) => ColDef<T>[];
 }
 
@@ -31,20 +31,38 @@ export const CalendarDrawer = <T extends { id: number }>({
 }: CalendarDrawerProps<T>): React.ReactElement => {
     const [date, setDate] = useState<Date | undefined>(new Date());
     const [historicalData, setHistoricalData] = useState<T[]>([]);
+    const [loading, setLoading] = useState<boolean>(false);
 
     const columnDefs = getColumnDefs(() => null, false, false); // No history button needed, non-editable
 
-    const handleDateSelect = (selectedDate: Date | undefined) => {
+    const handleDateSelect = async (selectedDate: Date | undefined) => {
         if (!selectedDate) return;
+
         setDate(selectedDate);
-        const data = getDataForDate(selectedDate);
-        setHistoricalData(data);
+        setLoading(true);
+
+        try {
+            const data = await getDataForDate(selectedDate);
+            setHistoricalData(data);
+        } catch (error) {
+            console.error("Error fetching historical data:", error);
+            setHistoricalData([]);
+        } finally {
+            setLoading(false);
+        }
     };
+
+    // Load initial data when drawer opens
+    useEffect(() => {
+        if (isOpen && date) {
+            handleDateSelect(date);
+        }
+    }, [isOpen]);
 
     return (
         <Drawer open={isOpen} onOpenChange={onOpenChange}>
             <DrawerContent className="h-[90vh] ">
-                <div className="conatiner mx-auto w-[90%]">
+                <div className="container mx-auto w-[90%]">
                     <DrawerHeader>
                         <DrawerTitle>Historical View</DrawerTitle>
                         <DrawerDescription>
@@ -68,23 +86,25 @@ export const CalendarDrawer = <T extends { id: number }>({
                         </div>
 
                         <div className="md:col-span-3 ag-theme-alpine h-[350px]">
-                            <AgGridReact
-                                rowData={historicalData}
-                                columnDefs={columnDefs}
-                                // defaultColDef={{
-                                //     suppressMovable: true
-                                // }}
-                                // getRowId={(params) => params.data.id.toString()}
-                                defaultColDef={{
-                                    editable: false,
-                                    suppressMovable: true,
-                                    resizable: true, // Allow column resizing
-                                    minWidth: 150, // Minimum column width
-                                }}
-                                getRowId={(params) => params.data.id.toString()}
-                                suppressHorizontalScroll={false} // Enable horizontal scroll
-                                alwaysShowHorizontalScroll={true} // Always show scrollbar
-                            />
+                            {loading ? (
+                                <div className="flex items-center justify-center h-full">
+                                    <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-gray-900"></div>
+                                </div>
+                            ) : (
+                                <AgGridReact
+                                    rowData={historicalData}
+                                    columnDefs={columnDefs}
+                                    defaultColDef={{
+                                        editable: false,
+                                        suppressMovable: true,
+                                        resizable: true,
+                                        minWidth: 150,
+                                    }}
+                                    getRowId={(params) => params.data.id.toString()}
+                                    suppressHorizontalScroll={false}
+                                    alwaysShowHorizontalScroll={true}
+                                />
+                            )}
                         </div>
                     </div>
 

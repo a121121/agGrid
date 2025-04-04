@@ -1,5 +1,7 @@
 // 📄 lib/kitDataProcessor.ts
+//this is important for the summar table keep it as it is
 import { Kit } from '@/types/kit';
+
 
 // Define types for the filter state
 export type KitCategoryFilter = 'Total' | 'Kit B' | 'Kit C' | 'Kit C 125';
