@@ -1,0 +1,57 @@
+// This is your Prisma schema file
+// Learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Kit {
+  id            Int      @id @default(autoincrement())
+  partNumber    String
+  noun          String
+  kitName       String
+  stateStatus   String
+  currentStatus String?
+  remarks       String
+  manufacturer  String
+  form48number  String
+  userName      String // Simplified from a foreign key relationship
+  shopName      String
+  dieRequired   Boolean
+  dieNumber     String
+  version       Int      @default(1)
+  createdAt     DateTime @default(now()) // When this version becomes valid
+  validUntil    DateTime @default(dbgenerated("'9999-12-31 23:59:59'")) // End of validity period
+
+  // Reference to the original kit ID this version belongs to
+  // This allows us to easily find all versions of a kit
+  originalKitId Int @default(-1)
+
+  // Add indexes to improve query performance
+  @@index([partNumber])
+  @@index([kitName])
+  @@index([stateStatus])
+  @@index([createdAt])
+  @@index([originalKitId, createdAt]) // Important for temporal queries
+  @@index([originalKitId, version]) // For finding specific versions
+}
+
+model AuditLog {
+  id        Int      @id @default(autoincrement())
+  kitId     Int // References the original kit ID
+  userName  String // Who made the change
+  changedAt DateTime @default(now())
+  version   Int
+  field     String // Which field was changed
+  oldValue  String // JSON stringified old value
+  newValue  String // JSON stringified new value
+
+  @@index([kitId])
+  @@index([changedAt])
+  @@index([kitId, changedAt]) // For efficient audit history queries
+}

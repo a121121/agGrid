@@ -1,0 +1,188 @@
+﻿Sno,partNumber,noun,kitName,stateStatus,currentStatus,manufacturer,form48number,userName,dieNumber,remarks
+1,Q/J10-0049-3/1Q/611S-89-3,Bolt (Rec'D From Log),Kit B,Part Trial Testing,NEW drawings h/o to machine shop 13-02-25,Machine shop,WLOGTF060620220016,JF-17 MRO,ada,sd
+2,Q/J10-0049-2/1Q/611S-89-2,Bolt,Kit B,Part Trial Testing,NEW drawings h/o to machine shop 13-02-25,Machine shop,WLOGTF060620220015,JF-17 MRO,,
+3,Q/611S-97-4X9,Special Rivets,Kit B,MCL,UNSAT 06-02-25,Machine Shop,WLOGTF211020210008,STRUCTURE JF-17 MRO,,
+4,Q/611S-97-4X11,Special Rivets (Log),Kit B,MCL,UNSAT 06-02-25,Machine Shop,WLOGTF010220220018,STRUCTURE JF-17 MRO,,
+5,Q/611S-97-4X10,Special Rivets,Kit B,MCL,UNSAT 06-02-25,Machine Shop,WLOGTF110320210391,SRF JF-17 MRO,,
+6,Q/611598MJ6X1,Nut,Kit B,Part Under TFPart Under TF,HT 27-02-25,Machine Shop,WLOGTF160620220028,JF-17 MRO,,
+7,HB6746-4X8,Special Rivets (Log),Kit B,MCL,UNSAT 06-02-25,Machine Shop,WLOGTF010220220014,STRUCTURE JF-17 MRO,,
+8,HB6746-4X16,Special Rivets (Log),Kit B,MCL,UNSAT 06-02-25,Machine Shop,WLOGTF291120210017,STRUCTURE JF-17 MRO,,
+9,HB6746-4X14,Special Rivets (Log),Kit B,MCL,MCL Feb,,,STRUCTURE JF-17 MRO,,
+10,HB6746-4X12,Special Rivets (Log),Kit B,MCL,MCL Feb,,,STRUCTURE JF-17 MRO,,
+11,HB6746-4X10,Special Rivets (Log),Kit B,MCL,MCL Feb,,,STRUCTURE JF-17 MRO,,
+12,HB6423MJ22X1.5,Nut,Kit B,Part Under TF,Awt Tool,Machine Shop,WLOGTF080520190039,JF-17 MRO,,
+13,HB6420MJ24X2,Nut,Kit B,MCL,MCL Feb,,,GOH JF-17 MRO,,
+14,HB6240MJ24X2,Nut,Kit B,MCL,Area Unknown,,,JF-17 MRO,,
+15,GJB122.6.1.8X68X3.5,Bolt (Rec'D From Log),Kit B,MCL,Area Unknown,,,JF-17 MRO GOH,,
+16,GJB121.5.1.6X20X3MJ,Bolt,Kit B,MCL,MCL Feb,,,JF-17 MRO,,
+17,DD-FC1-77011-1202,Joint,Kit B,MCL,Area Unknown,,,JF-17 MRO,,
+18,DD-FC1-68074-1220,Landing Light Clamp,Kit B,Part Trial Testing,Rework 07-2-25 (U/DWG 03/03/25),S M  Shop,WLOGTF030820220007,CONT & MECH PART JF-17,,
+19,DD-FC1-68074-1210,Clamp,Kit B,Part Trial Testing,Rework 07-2-25 (U/DWG 03/03/25),S M  Shop,WLOGTF280220220018,CONT & MECH PART JF-17,,
+20,DD-FC1-62021-4,Three Way Joint,Kit B,Part Under TF,Part under TF,PMC Shop,WLOGTF180120210007,CONT & MECH PART JF-17,,
+21,DD-FC1-61052-150,Clamp,Kit B,Part Trial Testing,MISPLACE 07-02-25,S M Shop,WLOGTF280220220020,STRUCTURE JF-17 MRO,,
+22,DD-FC1-55167-8010H,Clamp,Kit B,MCL,MCL Feb,,,GOH JF-17 MRO,,
+23,DD-FC1-55156-5300,Hoop,Kit B,Part Trial Testing,Rework 21-2-25 (FAI),S M  Shop,WLOGTF210320220015,CONT & MECH PART JF-17,,
+24,DD-FC1-51101-2300,Bolt,Kit B,Part Trial Testing,Re-Work/Re-Mfg (HT 11/02/25),Machine Shop,WLOGTF131020210006,JF-17 MRO,,
+25,DD-FC1-42034-160,Bolt,Kit B,MCL,MCL Feb,,,JF-17 MRO,,
+26,DD-FC1-42034-1,Axis,Kit B,Part Under TF,Part under TF,PMC Shop,WLOGTF180420220008,JF-17 MRO,,
+27,DD-FC1-42004-20,Eye Bolt,Kit B,Part Trial Testing,Re-Work/Re-Mfg (m/c lm for capability delete) Sub Jobcard raised to PMC by S/T Sami by Machine Shop 06-03-25,Machine Shop,WLOGTF110520220114,CONT & MECH PART JF-17,,
+28,DD-FC1-41113-1,Bolt,Kit B,MCL,MCL Feb,,,JF-17 MRO,,
+29,DD-FC1-05016-125,Screw,Kit B,MCL,MCL Feb,,,JF-17 MRO,,
+30,1Q/611S-89-4(Q/J10-0049-4),Bolt (Log),Kit B,Part Trial Testing,NEW drawings h/o to machine shop 13-02-25,Machine Shop,WLOGTF111020210001,JF-17 MRO,,
+31,QS101-110,Air Inlet Valve,Kit C,MCL,Awating F-022,,,AFR ACCY SHOP II,,
+32,QDF10-013,Valve,Kit C,Part Trial Testing,Die rework as per sample 14-02-25,,,INSTRUMENT SHOP,,
+33,KJY8A-00-4,Diaphragm,Kit C,MCL,MCL Feb,,,AFR ACCY SHOP II,,
+34,19X(Z)-DG-103B-02,Rubber Ring,Kit C,Part Under TF,Die under TF 360 solution,,,ELECTRICAL SHOP,,
+35,NZ35H-27-3-5080,Seal Ring,Kit C,Die Under TF,Die rework as per sample 19-02-25,,,AFR ACCY SHOP II,81-F7-69,
+36,16D105-17.5-2.5-B,Seal Ring,Kit C,MCL,MCL Feb,,,AFR ACCY SHOP II,81-JF-17-234,
+37,16D105-35-3.6-B,Seal Ring,Kit C,MCL,MCL Feb,,,AFR ACCY SHOP II,81-JF-17-218,
+38,16D105-38.5-3-B,Seal Ring,Kit C,MCL,MCL Feb,,,AFR ACCY SHOP II,81-JF-17-232,
+39,16D105-7.7-1.9-B,Seal Ring,Kit C,MCL,MCL Feb,,,AFR ACCY SHOP II,81-JF-17-218,
+40,16D105-9.3-3.6-X,Seal Ring,Kit C,MCL,MCL Feb,,,AFR ACCY SHOP II,81-JF-17-232,
+41,3S12.2x2-J7,Seal Ring,Kit C,MCL,MCL Feb,,,AFR ACCY SHOP II,81-JF-17-289,
+42,3S60X2-J7,Seal Ring,Kit C,Die Under TF,Die rework as per sample 19-02-25,,,AFR ACCY SHOP I,81-JF-17-220,
+43,3S7.5X1.5-J7,Seal Ring,Kit C,Part Under TF,"Part under TF 28/02/25, Die rework required internal dia 7.3 instead of 7.5 also burs are thick.",,WTFRP2802250082,AFR ACCY SHOP I,81-JF-17-237,
+44,Q/11D-02-6-(5080-1),Seal Ring,Kit C,Part Under TF,Die not receive from 360 solutions 14-02-25,,,AFR ACCY SHOP II,81-JF-17-59,
+45,QDF10-014,Valve,Kit C,MCL,SAT,R&P CoE,,INSTRUMENT SHOP,81-JF-17-380,
+46,4X1X1GB1018H62M,Gasket,Kit C,MCL,SAT,S M  Shop,WTFSM1211240001,ELECTRICAL SHOP,,
+47,5X3X1GB1018H62M,Gasket,Kit C,MCL,SAT,S M  Shop,WTFSM1211240003,ELECTRICAL SHOP,,
+48,8X4X1GB1018H62M,Gasket,Kit C,MCL,SAT,S M  Shop,WTFSM1211240002,ELECTRICAL SHOP,,
+49,QS110A-003,Head,Kit C,Part Trial Testing,H/O to user 20-02-25 Comp awt in Shop,PMC Shop,WTFPM2008240042,AFR ACCY SHOP II,,
+50,QS110A-004,Pipe Joint,Kit C,MCL,MCL Feb,,,AFR ACCY SHOP II,,
+51,YXF78-00-04,Valve,Kit C,MCL,MCL Feb,,,AFR ACCY SHOP II,,
+52,YXF78-00-08A,Piston Rod,Kit C,Part Trial Testing,NEW drawings h/o to machine shop 21-02-25,Machine Shop,,AFR ACCY SHOP II,,
+53,YLF12-00-1,Cap,Kit C,Part Under TF,TF. Under 3rd rework,Machine Shop,WLOGTF280920230006,AFR ACCY SHOP II,,
+54,RL41-000-05,Adjusting Gasket,Kit C,MCL,MCL Feb,,,AFR ACCY SHOP II,,
+55,19X-YXF63-02,Spring,Kit C,MCL,MCL Feb,,,AFR ACCY SHOP II,,
+56,19X-YXF63-03,Casing,Kit C,Part Trial Testing,"Fitting SAT, Part with dwg H/O to MS for remaining machining and HT,ST. ",,,AFR ACCY SHOP II,,
+57,YXF64/1Y-0002,Valve Seat,Kit C,MCL,MCL Feb,PMC Shop,WTFPM2008240006,AFR ACCY SHOP II,,
+58,YYS2-102,Pipe Joint,Kit C,Part Trial Testing,Rework for passivation 28-02-25 colour was black,Machine Shop,WTFMS0710240027,AFR ACCY SHOP II,,
+59,1092/2-01-15,Sealing Washer,Kit C,MCL,Under Trial Test 06-03-25,R&P CoE,WTFRP1002250089,INSTRUMENT SHOP,81-JF-17-380,
+60,FA3-11-2J7,Rubber Seal,Kit C,MCL,MCL ALUMINIUM 10 CYCLE DIE,,,AFR ACCY SHOP I,,
+61,YDF33-1013,COVER,Kit C,MCL,MCL Feb,Machine Shop,WTFMS1009240010,AFR ACCY SHOP I,,
+62,YDF23-105,UPPER VALVE,Kit C,Part Trial Testing,"H/O to user 18-02-25 Comp awt in shop Comp Will available after 15 March, 25",Machine Shop,WTFMS1009240011,AFR ACCY SHOP I,,
+63,RDF44-0006,INLET PIPE JOINT,Kit C 125,Under Indegenization,Under Drawing,Machine shop,,AFR ACCY SHOP I,,Metallic-Under Feasibility 21-03-25
+64,YDF33-2002,BUSH,Kit C 125,MCL,MCL,,,,,Metallic-
+65,YDT12-009,STOP RING,Kit C 125,Part Under TF,Under Feasibility 10 Sep 2024,SPRING SHOP,WTFSP1903250005,AFR ACCY SHOP II,,Metallic-Under Feasibility 10 Sep 2024
+66,QX-20,SCREW PLUG,Kit C 125,MCL,MCL,,,,,Metallic-
+67,YDF23-105,UPPER VALVE,Kit C 125,Part Trial Testing,Under Trial Test,ACC SHOP 1,,,,Metallic-ALSO IN 62 KIT PARTS
+68,YZL33-2005,GASKET,Kit C 125,Part Under TF,CAN BE MFG,Machine shop,WTFMS2403250002,AFR ACCY SHOP I,,Metallic-Under Feasibility 13-01-25
+69,YZL33-2006,GASKET,Kit C 125,Part Under TF,CAN BE MFG,Machine shop,WTFMS2403250001,AFR ACCY SHOP I,,Metallic-Under Feasibility 13-01-25
+70,YZL33-2011,SPRING,Kit C 125,Under Indegenization,Under Drawing,,,,,Metallic-Under Drawing
+71,YZL26-0006,ECCENTRIC RING,Kit C 125,Under Indegenization,Under Drawing,,,,,Metallic-Under Drawing
+72,HB1-710B6x52,TORQUE LINK PIN,Kit C 125,Under Indegenization,under Drawing,,,,,Metallic-under Drawing
+73,DD-FC1-42014-111,BUSHING,Kit C 125,Part Under TF,Under Feasibility,PMC,WTFPM1303250003,AFR ACCY SHOP I,,Metallic-Under Feasibility 08-01-25
+74,DD-FC1-42014-112,BUSHING,Kit C 125,Under Indegenization,Under Drawing 13-03-2025,PMC,,AFR ACCY SHOP I,,Metallic-Under Drawing Tolerance issue
+75,DD-FC1-42014-12,UPPER CAM,Kit C 125,Under Indegenization,Under Drawing,,,AFR ACCY SHOP I,,Metallic-F-17 and sample H/O  TO F-017 TEAM FOR CAD Model requested by PMC 05-03-25
+76,YZL25-1303,TAPER SLEEVE,Kit C 125,Under Indegenization,Under Drawing,,,,,Metallic-Under Drawing
+77,YZL25-1002,LOCK NUT,Kit C 125,Under Indegenization,Under Feasibility 30-12-24,Machine shop,,,,Metallic-Under Feasibility 30-12-24
+78,HB4-56J7-31,Seal Ring,Kit C 125,Part Trial Testing,Under Trial Test SHOP 1,,WLOGTF180720220021,AFR ACCY SHOP I,,Rubber-Under Trial Test SHOP 1
+79,HB4-58-31-2B,Guard Ring,Kit C 125,Part Trial Testing,Under Trial Test SHOP 1,,WLOGTF180720220022,AFR ACCY SHOP I,,Rubber-FZ20-1009
+80,HB4-56J7-121,Seal Ring,Kit C 125,Part Trial Testing,Under Trial Test SHOP 1,,WLOGTF250820220008,AFR ACCY SHOP I,81-K8-27,Rubber-FZ20-1005
+81,HM12X1.5GB54-45,Nut,Kit C 125,Part Trial Testing,"Under Trial Test Recovery Cell, TRIAL ISSUE CALL TO 2091 AFM AMJAD, NEW F-48 RAISED PART MISPLACED BY USER",Recovery Cell,WTFMS2003250083,RECOVERY CELL,,Metallic-ALSO IN K8 PARTS V2 SR 103
+82,GB/T67-M2x5,FILLISTER HEAD SCREW,Kit C 125,Under Indegenization,Under Drawing 18-03-25,Machine shop,,AVIONIC SHOP,,Metallic-Under Drawing 18-03-25
+83,CD1-0000-11,CONDUCTING RING,Kit C 125,Under Indegenization,Under Drawing 06-03-25,,,AVIONIC SHOP,,"Metallic-Material, Hardness and ST info N/A"
+84,CD1-0000-01,SCREW,Kit C 125,Under Indegenization,Under Drawing 18-03-25,Machine shop,,AVIONIC SHOP,,Metallic-Under Drawing 18-03-25
+85,CD1-0000-15,BUSH,Kit C 125,Under Indegenization,Under Drawing 06-03-25,Machine shop,,AVIONIC SHOP,,Metallic-Under Feasibility 21-03-25
+86,HB1-521GD-5X2X1,GASKET,Kit C 125,Under Indegenization,Under Drawing,,,,,Rubber-Under Drawing
+87,GB/T6170-1986-M2.5-1Cr18Ni9Ti,NUT,Kit C 125,Under Indegenization,Sample Awaiting,,,,,Metallic-
+88,GB/T6170-1986-M5-1Cr18Ni9Ti,NUT,Kit C 125,Form 17 Pending,Form 17 Pending,,,,,Metallic-
+89,GB861.1-87-2.5-Ep·ZnNi3·P,INTERNAL TOOTH LOCKING WASHER,Kit C 125,Beyond Capability,Beyond Design,,,ELECTRICAL SHOP,,Metallic-
+90,GB/T818-2000-3-A140,WASHER,Kit C 125,Part Under TF,CAN BE MFG,PMC,WTFPM1303250001,ELECTRICAL SHOP,,Metallic-RE FEASIBILITY SENT TO PMC 04-03-25
+91,GB/T818-2000-M2x5-A2-70,SCREW,Kit C 125,Under Indegenization,Under Feasibility 08-01-25,Machine shop,,ELECTRICAL SHOP,,Metallic-Under Feasibility 08-01-25
+92,GB/T818-2000-M2x6-A2-70,SCREW,Kit C 125,Part Under TF,Under Feasibility 26-02-25,Machine shop,,ELECTRICAL SHOP,,Metallic-Under Feasibility 26-02-25
+93,GB/T818-2000-M3x6-A2-70,SCREW,Kit C 125,Part Under TF,Under Drawing,,,,,Metallic-Under Drawing
+94,GB/T819.2-1997-M2.5X5-A2-70,SCREW,Kit C 125,Under Indegenization,Under Feasibility 11-03-25,Machine shop,,ELECTRICAL SHOP,,Metallic-Under Feasibility 11-03-25
+95,GB/T819.2-1997-M2.5x80·Zn5~8·DH(Black),SCREW,Kit C 125,Under Indegenization,Under Drawing,,,,,Metallic-Under Drawing
+96,GB/T819.2-1997-M2x6-A2-70,SCREW,Kit C 125,Under Indegenization,Under Drawing,,,,,Metallic-Under Drawing
+97,HB2-6-6X6,RUBBER RING,Kit C 125,Die under Drawing,Die under Drawing 04-02-25,,,ELECTRICAL SHOP,,Rubber-Die under Drawing 04-02-25
+98,HB1-203F-M3X10,SCREW,Kit C 125,Under Indegenization,Under Drawing,,,,,Metallic-JC HELD WITH JF17 TEAM SAMPLE REQUIRED
+99,HB1-203F-M3X6,SCREW,Kit C 125,Under Indegenization,Under Drawing,,,,,Metallic-JC HELD WITH JF17 TEAM SAMPLE REQUIRED
+100,HB1-221F-M3X12,SCREW,Kit C 125,Under Indegenization,Under Feasibility 22-01-25,Machine shop,,ELECTRICAL SHOP,,Metallic-
+101,HB1-GD2X3X0.5,GASKET,Kit C 125,Under Indegenization,Under Drawing,,,,,"Rubber-stand not available, sample not available"
+102,HB1XGD3X4X0.5,GASKET,Kit C 125,Under Indegenization,Under Drawing,,,,,"Rubber-stand not available, sample not available"
+103,HTPQ-6X10,SLEEVE,Kit C 125,Under Indegenization,Sample Awaiting,,,ELECTRICAL SHOP,,Rubber-COT ITEM DISCUSS WITH PFM ASIF SB 10-3-25
+104,HB6258-M2,NUT,Kit C 125,Under Indegenization,Under Feasibility 17-03-25,Machine shop,,ELECTRICAL SHOP,,Metallic-Under Feasibility 17-03-25
+105,M444003,DISC SHAPPED SPRING,Kit C 125,Under Indegenization,Under Feasibility 13-03-25,"PMC, SMS, MS",,,,Metallic-Under Feasibility 13-03-25
+106,HB1-203F-4X12,SCREW,Kit C 125,Under Indegenization,Under Drawing,,,,,Metallic-Under Dwg after solving querry  05-03-2025
+107,HB1-203F-M3X8,SCREW,Kit C 125,Under Indegenization,Under Drawing,,,,,Metallic-
+108,HB1-203F-M4X10,SCREW,Kit C 125,Under Indegenization,Under Drawing,,,,,Metallic-Under Dwg after solving querry  27-02-2025
+109,HB1-203F-M4X12,SCREW,Kit C 125,Under Indegenization,Under Drawing,,,,,Metallic-Under Dwg after solving querry  05-03-2025
+110,RDF44-0003,SPRING,Kit C 125,Form 17 Pending,Form-017 Requried,,,,,Metallic-
+111,RDF44-0004,SPRING SEAT,Kit C 125,Form 17 Pending,Form-017 Requried,,,,,Metallic-
+112,RDF44-1001,VALVE,Kit C 125,Form 17 Pending,Form-017 Requried,,,,,Metallic-
+113,YDF33-1012,SLIDE VALVE,Kit C 125,Form 17 Pending,Form-017 Requried,,,,,Metallic-
+114,YDF33-1014,SPRING,Kit C 125,Form 17 Pending,Form-017 Requried,,,,,Metallic-
+115,FR307-104,SPRING SEAT,Kit C 125,Form 17 Pending,Form-017 Requried,,,,,Metallic-
+116,FR307-105,SPRING SEAT,Kit C 125,Form 17 Pending,Form-017 Requried,,,,,Metallic-
+117,FR307-106,SPRING,Kit C 125,Form 17 Pending,Form-017 Requried,,,,,Metallic-
+118,FR307-107,SMALL SHAFT,Kit C 125,Form 17 Pending,Form-017 Requried,,,,,Metallic-
+119,FR307-108,VALVE SEAT,Kit C 125,Form 17 Pending,Form-017 Requried,,,,,Metallic-
+120,J7I-4102-315,BOLT,Kit C 125,Under Indegenization,Under Feasibility 13-03-25,Machine shop,,AFR ACCY SHOP II,,Metallic-
+121,YDT12-005,NUT,Kit C 125,Part Under TF,Under Feasibility 26-02-25,Machine shop,WTFMS2403250003,AFR ACCY SHOP II,,Metallic-
+122,YDT12-012,LABEL,Kit C 125,Part Under TF,CAN BE MFG,PMC,WTFPM1803250060,AFR ACCY SHOP II,,Metallic-RE FEASIBILITY SENT TO PMC 04-03-25
+123,16D106-36-30.2-B,PROTECTIVE RING,Kit C 125,Form 17 Pending,Form-017 Requried,,,,,Rubber-
+124,16D106-45.4-40,PROTECTIVE RING,Kit C 125,Form 17 Pending,Form-017 Requried,,,,,Rubber-
+125,QYF44-02,SCREW PLUG,Kit C 125,Form 17 Pending,Form-017 Requried,,,,,Metallic-
+126,QYF44A-02,VALVE,Kit C 125,Form 17 Pending,Form-017 Requried,,,,,Metallic-
+127,HB6260M4RI-hole 3,NUT,Kit C 125,Under Indegenization,Under Feasibility 17-03-25,Machine shop,,AFR ACCY SHOP II,,Metallic-
+128,HB6260M5RI-hole 3,NUT,Kit C 125,Under Indegenization,Under Feasibility 17-03-25,Machine shop,,AFR ACCY SHOP II,,Metallic-
+129,RDF23-111,RIVET,Kit C 125,Form 17 Pending,Form-017 Requried,,,,,Metallic-
+130,RDF23-113,SCREW,Kit C 125,Form 17 Pending,Form-017 Requried,,,,,Metallic-
+131,RDF23-101,PIN,Kit C 125,Form 17 Pending,Form-017 Requried,,,,,Metallic-
+132,RDF23-106,SPRING,Kit C 125,Form 17 Pending,Form-017 Requried,,,,,Metallic-
+133,CT28-105,LIFT ROD,Kit C 125,Form 17 Pending,Form-017 Requried,,,,,Metallic-
+134,YDF23-106,LOWER VALVE,Kit C 125,Form 17 Pending,Form-017 Requried,,,,,Metallic-
+135,YDF23-109,CAP COVER,Kit C 125,Form 17 Pending,Form-017 Requried,,,,,Metallic-
+136,YDF23-110,SPRING,Kit C 125,Form 17 Pending,Form-017 Requried,,,,,Metallic-
+137,ZL-44208A,BUSH,Kit C 125,Form 17 Pending,Form-017 Requried,,,,,Metallic-
+138,QDF51-0001,CASING,Kit C 125,Form 17 Pending,Form-017 Requried,,,,,Metallic-
+139,ZL-44470A,S/PLUG,Kit C 125,Form 17 Pending,Form-017 Requried,,,,,Metallic-
+140,ZL-8109U,SPRING,Kit C 125,Form 17 Pending,Form-017 Requried,,,,,Metallic-
+141,YZL25-3001,FRONT HOUSING,Kit C 125,Form 17 Pending,Form-017 Requried,,,,,Metallic-
+142,YZL25-3100,VALVE SEAT ASSEMBLY,Kit C 125,Form 17 Pending,Form-017 Requried,,,,,Metallic-
+143,YZL25-4000,REAR VALVE BODY ASSEMBLY,Kit C 125,Form 17 Pending,Form-017 Requried,,,,,Metallic-
+144,YZL25-4001,REAR HOUSING,Kit C 125,Form 17 Pending,Form-017 Requried,,,,,Metallic-
+145,RLB34-109,SHAFT,Kit C 125,Form 17 Pending,Form-017 Requried,,,,,Metallic-
+146,RLB34-112,ADJUSTING WASHER,Kit C 125,Form 17 Pending,Form-017 Requried,,,,,Metallic-
+147,RLB34-113,LOCK WASHER,Kit C 125,Form 17 Pending,Form-017 Requried,,,,,Metallic-
+148,RLB34-114,SLOTTED NUT,Kit C 125,Form 17 Pending,Form-017 Requried,,,,,Metallic-
+149,HB6351-5,LOCK WASHER,Kit C 125,Form 17 Pending,Form-017 Requried,,,,,Metallic-
+150,FZ-508,PRESSURIZATION VENT VALVE,Kit C 125,Form 17 Pending,Form-017 Requried,,,,,Metallic-
+151,FZ508-101,CASING,Kit C 125,Form 17 Pending,Form-017 Requried,,,,,Metallic-
+152,FZ508-102,UPPER COVER,Kit C 125,Form 17 Pending,Form-017 Requried,,,,,Metallic-
+153,YXF78-00-05,VALVE SEAT,Kit C 125,Form 17 Pending,Form-017 Requried,,,,,Metallic-
+154,YXF78-00-07,GUARD RING,Kit C 125,Form 17 Pending,Form-017 Requried,,,,,Metallic-
+155,YDT16-003,SPRING COIL,Kit C 125,Under Indegenization,Under Drawing,,,,,Metallic-
+156,YDT13-003,SEAL SLEEVE ASSY,Kit C 125,Under Indegenization,Under Drawing,,,,,Rubber-SAMPLE REQUIRED TO BY CUT FOR DIMENSIONING 04-03-25
+157,YDT13-005,LOCK PIECE,Kit C 125,Under Indegenization,IN LIUE PART UNDER FEASIBILITY,,,,,Metallic-SAME AS YDT16-010 IN LIUE TO BE MARK  05-03-25
+158,YDT13-006,EYE BOLT,Kit C 125,Under Indegenization,Under Drawing,,,,,Metallic-
+159,YDT13-007,BOLT,Kit C 125,Under Indegenization,Under Feasibility 18-03-25,Machine shop,,AFR ACCY SHOP II,,Metallic-
+160,YDT13-100,ELBOW NOZZLE,Kit C 125,Under Indegenization,Under Drawing,,,,,Metallic-
+161,FR227-0002,CONNECTING ROD,Kit C 125,Form 17 Pending,Form-017 Requried,,,,,Metallic-
+162,FR227-0004,UPPER CASING,Kit C 125,Form 17 Pending,Form-017 Requried,,,,,Metallic-
+163,FR227-0005,UPPER COVER,Kit C 125,Under Indegenization,Under Drawing 06-03-25,,,,,Metallic-
+164,FZ508-115,LARGE SPRING SEAT,Kit C 125,Form 17 Pending,Form-017 Requried,,,,,Metallic-
+165,GB894.1-86-6-65Mn-Zn.D,CIRCLIP FOR SHAFT,Kit C 125,Form 17 Pending,Form-017 Requried,,,,,Metallic-
+166,DD-FC1-42014-110,PISTON ROD,Kit C 125,Form 17 Pending,Form-017 Requried,,,,,Metallic-
+167,YZL25-1300,PISTON ROD ASSEMBLY,Kit C 125,Form 17 Pending,Form-017 Requried,,,,,Metallic-
+168,YZL25-1301,LARGE PISTON ROD,Kit C 125,Form 17 Pending,Form-017 Requried,,,,,Metallic-
+169,YZL25-1302,SMALL PISTON ROD,Kit C 125,Form 17 Pending,Form-017 Requried,,,,,Metallic-
+170,ZL-44270A,H/B ASSY,Kit C 125,Form 17 Pending,Form-017 Requried,,,,,Metallic-
+171,ZL-44350A,THREDDE PLUG,Kit C 125,Form 17 Pending,Form-017 Requried,,,,,Metallic-
+172,YDT15-001(Y),UNIVERSAL JOINT,Kit C 125,Form 17 Pending,Form-017 Requried,,,,,Metallic-
+173,YDT17-200(Y),OUTER CYLINDER,Kit C 125,Form 17 Pending,Form-017 Requried,,,,,Metallic-
+174,YDT16-010,KEY,Kit C 125,Part Under TF,Under Feasibility 26-02-25,Machine shop,,AFR ACCY SHOP II,,Metallic-
+175,T8A.07.01,RETAINER,Kit C 125,MCL,MCL,SPRING SHOP,,,,Metallic-PART RELACE WITH YDT18-001
+176,YDT18-001-1,LABEL,Kit C 125,Form 17 Pending,Form-017 Requried,,,,,Metallic-
+177,YDT18-002-2,STRIP,Kit C 125,Form 17 Pending,Form-017 Requried,,,AFR ACCY SHOP II,,Metallic-PART RELACE WITH YDT18-001-2
+178,YDT18-005,EARING JOINT ASSY,Kit C 125,Form 17 Pending,Form-017 Requried,,,,,Metallic-
+179,TF-112-1,SCREW,Kit C 125,Form 17 Pending,Form-017 Requried,,,,,Metallic-
+180,TF-120,RUBBER GASKET,Kit C 125,Form 17 Pending,Form-017 Requried,,,,,Rubber-
+181,TF-133,SEAL RING,Kit C 125,Form 17 Pending,Form-017 Requried,,,,,Rubber-
+182,YS126A-011,CASING ASSEMBLY,Kit C 125,Form 17 Pending,Form-017 Requried,,,,,Metallic-
+183,YS126A-102,VALVE CORE,Kit C 125,Form 17 Pending,Form-017 Requried,,,,,Metallic-
+184,YS126B-011,ORIFICE COMPONENT,Kit C 125,Form 17 Pending,Form-017 Requried,,,,,Metallic-
+185,GB6172M6-1Cr17Ni2,THIN HEXAGON NUT,Kit C 125,Under Indegenization,Under Feasibility 18-03-25,Machine shop,,AFR ACCY SHOP II,,Metallic-
+186,YYS2-103,RIGHT END COVER,Kit C 125,Form 17 Pending,Form-017 Requried,,,,,Metallic-
+187,FA3-17-2.8J7,SEALING RING,Kit C 125,Form 17 Pending,Form-017 Requried,,,,,Rubber-
