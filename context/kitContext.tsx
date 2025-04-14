@@ -17,6 +17,7 @@ interface KitContextType {
     fetchKits: (date?: Date) => Promise<void>;
     updateKit: (kitId: number, updatedValues: Partial<Kit>, userName: string) => Promise<void>;
     resetFilters: () => void;
+    refreshData: () => void;
 }
 
 const defaultFilters: FilterState = {
@@ -99,6 +100,12 @@ export const KitProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         }
     }, []);
 
+    // Function to refresh data
+    const refreshData = async () => {
+        fetchKits();
+        setProcessedData(processKitData(kits, filters));
+    };
+
     const resetFilters = useCallback(() => {
         setFilters(defaultFilters);
     }, []);
@@ -124,7 +131,8 @@ export const KitProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         setFilters,
         fetchKits,
         updateKit,
-        resetFilters
+        resetFilters,
+        refreshData
     };
 
     return <KitContext.Provider value={value}>{children}</KitContext.Provider>;

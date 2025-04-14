@@ -1,4 +1,4 @@
-// 📄 components/grid/GridComponent.tsx
+// components/grid/GridComponent.tsx
 import React, { useState, useRef, useEffect, useMemo } from 'react';
 import { AgGridReact } from 'ag-grid-react';
 import "ag-grid-community/styles/ag-theme-alpine.css";
@@ -15,8 +15,8 @@ import { Kit, AuditRecord } from '@/types/kit';
 import { getKitColumnDefs } from './gridColumnDefs';
 import { useKitContext } from '@/context/kitContext';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuCheckboxItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
-import { SlidersHorizontal } from 'lucide-react';
-import { GridApi } from 'ag-grid-community';
+import { SlidersHorizontal, Plus } from 'lucide-react';
+import AddKitModal from './AddKitModal';
 
 // Register modules once
 registerAgGridModules();
@@ -32,7 +32,7 @@ interface ColumnVisibility {
 const GridComponent: React.FC<GridComponentProps> = ({
     readOnly = false
 }) => {
-    const { processedData } = useKitContext();
+    const { processedData, refreshData } = useKitContext();
     const kitData = processedData.filteredData;
 
     const {
@@ -45,6 +45,7 @@ const GridComponent: React.FC<GridComponentProps> = ({
     } = useChangeTracking<Kit>();
 
     const [isHistoryDrawerOpen, setIsHistoryDrawerOpen] = useState(false);
+    const [isAddKitModalOpen, setIsAddKitModalOpen] = useState(false);
     const [selectedRowId, setSelectedRowId] = useState<number | null>(null);
     const gridRef = useRef<AgGridReact<Kit>>(null);
     const [auditRecords, setAuditRecords] = useState<AuditRecord[] | null>(null);
@@ -92,6 +93,11 @@ const GridComponent: React.FC<GridComponentProps> = ({
         }));
     };
 
+    const handleKitAdded = (newKit: Kit) => {
+        // Refresh data from context after a kit is added
+        refreshData();
+    };
+
     // Filter column definitions based on visibility
     const filteredColumnDefs = useMemo(() => {
         const allColumns = getKitColumnDefs((props: any) => (
@@ -126,6 +132,15 @@ const GridComponent: React.FC<GridComponentProps> = ({
             <div className="flex justify-between items-center">
                 <h2 className="text-xl font-semibold text-gray-800">Kit Data Grid</h2>
                 <div className="flex space-x-2">
+                    {!readOnly && (
+                        <Button
+                            onClick={() => setIsAddKitModalOpen(true)}
+                            className="bg-green-600 hover:bg-green-700 text-white"
+                        >
+                            <Plus className="mr-2 h-4 w-4" />
+                            Add Kit
+                        </Button>
+                    )}
                     <Button
                         variant="outline"
                         onClick={handleExport}
@@ -188,6 +203,7 @@ const GridComponent: React.FC<GridComponentProps> = ({
                 )}
             </div>
 
+            {/* History Drawer */}
             <HistoryDrawer
                 isOpen={isHistoryDrawerOpen}
                 onOpenChange={setIsHistoryDrawerOpen}
@@ -195,6 +211,13 @@ const GridComponent: React.FC<GridComponentProps> = ({
                 rowData={rowData}
                 auditRecords={auditRecords}
                 isLoading={isHistoryLoading}
+            />
+
+            {/* Add Kit Modal */}
+            <AddKitModal
+                isOpen={isAddKitModalOpen}
+                onClose={() => setIsAddKitModalOpen(false)}
+                onKitAdded={handleKitAdded}
             />
         </div>
     );

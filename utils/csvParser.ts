@@ -85,7 +85,7 @@ export default async function importCsv() {
 
     // Batch size for createMany operations
     // SQLite has limitations, so we might need to process in chunks
-    const batchSize = results.length - 100;
+    const batchSize = results.length;
     let successCount = 0;
     // const i = 0;
 

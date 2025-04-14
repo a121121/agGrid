@@ -114,15 +114,20 @@ export class KitService {
      * @param kitData Kit data
      */
     async createKit(kitData: Omit<Kit, 'id' | 'version'>): Promise<Kit> {
+        const createdAt = new Date();
         return await prisma.$transaction(async (tx) => {
             // 1. Create initial kit version
             const kit = await tx.kit.create({
                 data: {
                     ...kitData,
                     version: 1,
-                    originalKitId: -1 // Temporary value
+                    originalKitId: -1, // Temporary value
+                    createdAt: new Date(createdAt.setMonth(createdAt.getMonth() - 3)),
+                    validUntil: new Date('9999-12-31T23:59:59'), // Far future date to mark as current version
                 }
             });
+
+            // console.log(kit)
 
             // 2. Update originalKitId to point to itself
             const updatedKit = await tx.kit.update({

@@ -58,3 +58,28 @@ export async function PUT(
         );
     }
 }
+
+// Create a new kit
+export async function POST(request: NextRequest) {
+    try {
+        const kitService = new KitService();
+        const body = await request.json();
+
+        // Set default values if not provided
+        const kitData = {
+            ...body,
+            userName: body.userName || "System User", // Default user or get from auth
+        };
+
+        console.log(kitData);
+        const newKit = await kitService.createKit(kitData);
+
+        return NextResponse.json(newKit, { status: 201 });
+    } catch (error) {
+        console.error('Error creating kit:', error);
+        return NextResponse.json(
+            { error: 'Failed to create kit' },
+            { status: 500 }
+        );
+    }
+}
