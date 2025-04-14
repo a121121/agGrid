@@ -1,66 +1,33 @@
 // 📄 components/KitDashboardTable.tsx
 import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { PieChart } from '@mui/x-charts';
-import { KitStatusSummary, FilterState, KitCategoryFilter, StateStatusFilter } from '@/utils/processKitData';
-import { Kit } from '@/types/kit';
+import { useKitContext } from '@/context/kitContext';
+import { PieChart, Pie, Cell } from 'recharts';
 
-interface KitDashboardTableProps {
-    totalSummary: KitStatusSummary;
-    kitBSummary: KitStatusSummary;
-    kitCSummary: KitStatusSummary;
-    kitC125Summary: KitStatusSummary;
-    statusBreakdown: Record<Kit['stateStatus'], {
-        total: KitStatusSummary;
-        kitB: KitStatusSummary;
-        kitC: KitStatusSummary;
-        kitC125: KitStatusSummary;
-    }>;
-    filters: FilterState;
-    setFilters: React.Dispatch<React.SetStateAction<FilterState>>;
-}
+const KitDashboardTable: React.FC = () => {
+    const { processedData, filters, setFilters } = useKitContext();
+    const { totalSummary, kitSummaries, statusBreakdown } = processedData;
 
-const KitDashboardTable: React.FC<KitDashboardTableProps> = ({
-    totalSummary,
-    kitBSummary,
-    kitCSummary,
-    kitC125Summary,
-    statusBreakdown,
-    filters,
-    setFilters
-}) => {
-    // All possible state statuses
-    const allStateStatuses: Kit['stateStatus'][] = [
-        'Form 17 Pending',
-        'Under Indegenization',
-        'Part Under TF',
-        'Die Under TF',
-        'Part Trial Testing',
-        'MCL',
-        'Under Sourcing',
-        'Sourcing Completed',
-        'Beyond Capability'
-    ];
+    // Get unique kit types and status types
+    const kitTypes = Object.keys(kitSummaries);
+    const allStatuses = Object.keys(statusBreakdown);
 
-    // Handle category header click (Total, Kit B, Kit C, Kit C 125)
-    const handleCategoryClick = (category: KitCategoryFilter, event: React.MouseEvent) => {
+    // Function to handle category filter click
+    const handleCategoryClick = (category: string, event: React.MouseEvent) => {
         event.stopPropagation();
 
-        if (category === 'Total') {
-            // Select only Total and all statuses
-            setFilters({
-                categories: ['Total'],
-                statuses: ['All']
-            });
-        } else {
-            // If Total was selected, deselect it and select only this kit
-            // If this kit was already selected, toggle it off
-            // Otherwise, add this kit to selections
-            setFilters(prev => {
+        setFilters(prev => {
+            if (category === 'Total') {
+                // Select only Total
+                return { ...prev, categories: ['Total'] };
+            } else {
+                // If Total was selected, deselect it and select only this kit
+                // If this kit was already selected, toggle it off
+                // Otherwise, add this kit to selections
                 const isTotalSelected = prev.categories.includes('Total');
                 const isThisCategorySelected = prev.categories.includes(category);
 
-                let newCategories: KitCategoryFilter[];
+                let newCategories: string[];
 
                 if (isTotalSelected) {
                     // Deselect Total, select only this category
@@ -81,12 +48,12 @@ const KitDashboardTable: React.FC<KitDashboardTableProps> = ({
                     ...prev,
                     categories: newCategories
                 };
-            });
-        }
+            }
+        });
     };
 
-    // Handle status cell click (rows)
-    const handleStatusClick = (category: KitCategoryFilter, status: StateStatusFilter, event: React.MouseEvent) => {
+    // Handle status cell click
+    const handleStatusClick = (category: string, status: string, event: React.MouseEvent) => {
         event.stopPropagation();
 
         // Prevent selecting specific statuses for Total if kit categories are selected
@@ -101,7 +68,7 @@ const KitDashboardTable: React.FC<KitDashboardTableProps> = ({
         // Toggle the status in filters
         setFilters(prev => {
             const isStatusSelected = prev.statuses.includes(status);
-            let newStatuses: StateStatusFilter[];
+            let newStatuses: string[];
 
             if (status === 'All') {
                 // Select all statuses
@@ -126,7 +93,7 @@ const KitDashboardTable: React.FC<KitDashboardTableProps> = ({
     };
 
     // Check if a cell is selected
-    const isCellSelected = (category: KitCategoryFilter, status: StateStatusFilter): boolean => {
+    const isCellSelected = (category: string, status: string): boolean => {
         // For headers (All status)
         if (status === 'All') {
             return filters.categories.includes(category);
@@ -144,31 +111,34 @@ const KitDashboardTable: React.FC<KitDashboardTableProps> = ({
     };
 
     // Render a pie chart for a kit summary
-    const renderPieChart = (summary: KitStatusSummary) => {
+    const renderPieChart = (summary: typeof totalSummary) => {
         if (summary.total === 0) return <div className="text-center text-gray-400">No data</div>;
 
+        // For Recharts PieChart
+        const data = [
+            { name: 'MCL', value: summary.mclCount },
+            { name: 'Others', value: summary.total - summary.mclCount }
+        ];
+
+        const COLORS = ['#10b981', '#3b82f6'];
+
         return (
-            <div className="h-32">
-                <PieChart
-                    series={[
-                        {
-                            data: [
-                                { id: 0, value: summary.mclCount, label: 'MCL', color: '#10b981' },
-                                { id: 1, value: summary.total - summary.mclCount, label: 'Others', color: '#3b82f6' }
-                            ],
-                            innerRadius: 30,
-                            outerRadius: 50,
-                            paddingAngle: 2,
-                            cornerRadius: 4,
-                            startAngle: 0,
-                            endAngle: 360,
-                        }
-                    ]}
-                    width={140}
-                    height={140}
-                    margin={{ right: 5, left: 5, top: 5, bottom: 5 }}
-                    legend={{ hidden: true }}
-                />
+            <div className="h-32 flex justify-center">
+                <PieChart width={120} height={120}>
+                    <Pie
+                        data={data}
+                        cx={60}
+                        cy={60}
+                        innerRadius={25}
+                        outerRadius={40}
+                        paddingAngle={2}
+                        dataKey="value"
+                    >
+                        {data.map((entry, index) => (
+                            <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                        ))}
+                    </Pie>
+                </PieChart>
             </div>
         );
     };
@@ -199,51 +169,27 @@ const KitDashboardTable: React.FC<KitDashboardTableProps> = ({
                                     </div>
                                 </th>
 
-                                {/* Kit B Column Header */}
-                                <th
-                                    className={`border p-2 cursor-pointer transition-colors duration-200 hover:bg-blue-50 ${isCellSelected('Kit B', 'All') ? 'bg-blue-200' : ''}`}
-                                    onClick={(e) => handleCategoryClick('Kit B', e)}
-                                >
-                                    <div className="flex flex-col items-center">
-                                        <div className="font-semibold mb-2">Kit B</div>
-                                        {renderPieChart(kitBSummary)}
-                                        <div className="text-sm mt-2">
-                                            Total: {kitBSummary.total} | MCL: {kitBSummary.mclCount} ({kitBSummary.mclPercentage.toFixed(1)}%)
+                                {/* Dynamic Kit Type Column Headers */}
+                                {kitTypes.map(kitType => (
+                                    <th
+                                        key={kitType}
+                                        className={`border p-2 cursor-pointer transition-colors duration-200 hover:bg-blue-50 ${isCellSelected(kitType, 'All') ? 'bg-blue-200' : ''}`}
+                                        onClick={(e) => handleCategoryClick(kitType, e)}
+                                    >
+                                        <div className="flex flex-col items-center">
+                                            <div className="font-semibold mb-2">{kitType}</div>
+                                            {renderPieChart(kitSummaries[kitType])}
+                                            <div className="text-sm mt-2">
+                                                Total: {kitSummaries[kitType].total} | MCL: {kitSummaries[kitType].mclCount} ({kitSummaries[kitType].mclPercentage.toFixed(1)}%)
+                                            </div>
                                         </div>
-                                    </div>
-                                </th>
-
-                                {/* Kit C Column Header */}
-                                <th
-                                    className={`border p-2 cursor-pointer transition-colors duration-200 hover:bg-blue-50 ${isCellSelected('Kit C', 'All') ? 'bg-blue-200' : ''}`}
-                                    onClick={(e) => handleCategoryClick('Kit C', e)}
-                                >
-                                    <div className="flex flex-col items-center">
-                                        <div className="font-semibold mb-2">Kit C</div>
-                                        {renderPieChart(kitCSummary)}
-                                        <div className="text-sm mt-2">
-                                            Total: {kitCSummary.total} | MCL: {kitCSummary.mclCount} ({kitCSummary.mclPercentage.toFixed(1)}%)
-                                        </div>
-                                    </div>
-                                </th>
-
-                                {/* Kit C 125 Column Header */}
-                                <th
-                                    className={`border p-2 cursor-pointer transition-colors duration-200 hover:bg-blue-50 ${isCellSelected('Kit C 125', 'All') ? 'bg-blue-200' : ''}`}
-                                    onClick={(e) => handleCategoryClick('Kit C 125', e)}
-                                >
-                                    <div className="flex flex-col items-center">
-                                        <div className="font-semibold mb-2">Kit C 125</div>
-                                        {renderPieChart(kitC125Summary)}
-                                        <div className="text-sm mt-2">
-                                            Total: {kitC125Summary.total} | MCL: {kitC125Summary.mclCount} ({kitC125Summary.mclPercentage.toFixed(1)}%)
-                                        </div>
-                                    </div>
-                                </th>
+                                    </th>
+                                ))}
                             </tr>
                         </thead>
                         <tbody>
-                            {allStateStatuses.map((status) => (
+                            {/* All statuses rows */}
+                            {allStatuses.map((status) => (
                                 <tr key={status}>
                                     {/* Row Label */}
                                     <td className="border p-2 font-medium">{status}</td>
@@ -259,38 +205,19 @@ const KitDashboardTable: React.FC<KitDashboardTableProps> = ({
                                             : ''}
                                     </td>
 
-                                    {/* Kit B Column Cell */}
-                                    <td
-                                        className={`border p-2 text-center cursor-pointer transition-colors duration-200 hover:bg-blue-50 ${isCellSelected('Kit B', status) ? 'bg-blue-200' : ''} ${!filters.categories.includes('Kit B') ? 'opacity-50' : ''}`}
-                                        onClick={(e) => handleStatusClick('Kit B', status, e)}
-                                    >
-                                        {statusBreakdown[status].kitB.total}
-                                        {status === 'MCL' && kitBSummary.total > 0
-                                            ? ` (${(statusBreakdown[status].kitB.total / kitBSummary.total * 100).toFixed(1)}%)`
-                                            : ''}
-                                    </td>
-
-                                    {/* Kit C Column Cell */}
-                                    <td
-                                        className={`border p-2 text-center cursor-pointer transition-colors duration-200 hover:bg-blue-50 ${isCellSelected('Kit C', status) ? 'bg-blue-200' : ''} ${!filters.categories.includes('Kit C') ? 'opacity-50' : ''}`}
-                                        onClick={(e) => handleStatusClick('Kit C', status, e)}
-                                    >
-                                        {statusBreakdown[status].kitC.total}
-                                        {status === 'MCL' && kitCSummary.total > 0
-                                            ? ` (${(statusBreakdown[status].kitC.total / kitCSummary.total * 100).toFixed(1)}%)`
-                                            : ''}
-                                    </td>
-
-                                    {/* Kit C 125 Column Cell */}
-                                    <td
-                                        className={`border p-2 text-center cursor-pointer transition-colors duration-200 hover:bg-blue-50 ${isCellSelected('Kit C 125', status) ? 'bg-blue-200' : ''} ${!filters.categories.includes('Kit C 125') ? 'opacity-50' : ''}`}
-                                        onClick={(e) => handleStatusClick('Kit C 125', status, e)}
-                                    >
-                                        {statusBreakdown[status].kitC125.total}
-                                        {status === 'MCL' && kitC125Summary.total > 0
-                                            ? ` (${(statusBreakdown[status].kitC125.total / kitC125Summary.total * 100).toFixed(1)}%)`
-                                            : ''}
-                                    </td>
+                                    {/* Dynamic Kit Type Column Cells */}
+                                    {kitTypes.map(kitType => (
+                                        <td
+                                            key={`${status}-${kitType}`}
+                                            className={`border p-2 text-center cursor-pointer transition-colors duration-200 hover:bg-blue-50 ${isCellSelected(kitType, status) ? 'bg-blue-200' : ''} ${!filters.categories.includes(kitType) ? 'opacity-50' : ''}`}
+                                            onClick={(e) => handleStatusClick(kitType, status, e)}
+                                        >
+                                            {statusBreakdown[status].byKit[kitType].total}
+                                            {status === 'MCL' && kitSummaries[kitType].total > 0
+                                                ? ` (${(statusBreakdown[status].byKit[kitType].total / kitSummaries[kitType].total * 100).toFixed(1)}%)`
+                                                : ''}
+                                        </td>
+                                    ))}
                                 </tr>
                             ))}
                         </tbody>

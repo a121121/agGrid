@@ -1,47 +1,70 @@
+// 📄 components/grid/GridComponent.tsx
 import React, { useState, useRef, useEffect, useMemo } from 'react';
 import { AgGridReact } from 'ag-grid-react';
 import "ag-grid-community/styles/ag-theme-alpine.css";
 import "ag-grid-community/styles/ag-theme-balham.css";
 import "ag-grid-community/styles/ag-theme-material.css";
 import "ag-grid-community/styles/ag-theme-quartz.css";
-import { HistoryButtonRenderer } from './HistoryButtonRenderer'
-import { SaveChangesButton } from './SaveChangesButton'
-import { HistoryDrawer } from './HistoryDrawer'
+import { HistoryButtonRenderer } from './HistoryButtonRenderer';
+import { SaveChangesButton } from './SaveChangesButton';
+import { HistoryDrawer } from './HistoryDrawer';
 import { useChangeTracking } from '@/hooks/useChangeTracking';
 import { registerAgGridModules } from '@/utils/agGridModules';
 import { Button } from '@/components/ui/button';
 import { Kit, AuditRecord } from '@/types/kit';
 import { getKitColumnDefs } from './gridColumnDefs';
+import { useKitContext } from '@/context/kitContext';
+import { DropdownMenu, DropdownMenuContent, DropdownMenuCheckboxItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
+import { SlidersHorizontal } from 'lucide-react';
+import { GridApi } from 'ag-grid-community';
+
 // Register modules once
 registerAgGridModules();
 
 interface GridComponentProps {
-    rowData?: Kit[];
     readOnly?: boolean;
-    onChangesSaved?: (updatedRow: Kit, rowId: number) => void; // Update to pass individual rows
+}
+
+interface ColumnVisibility {
+    [key: string]: boolean;
 }
 
 const GridComponent: React.FC<GridComponentProps> = ({
-    rowData: initialRowData,
-    readOnly = false,
-    onChangesSaved
+    readOnly = false
 }) => {
-    const kitData = initialRowData || [];
+    const { processedData } = useKitContext();
+    const kitData = processedData.filteredData;
 
     const {
         rowData,
         localChanges,
         isLoading,
         onCellValueChanged,
-        saveChanges: originalSaveChanges,
+        saveChanges,
         getChangeHistory
-    } = useChangeTracking<Kit>(kitData);
+    } = useChangeTracking<Kit>();
 
     const [isHistoryDrawerOpen, setIsHistoryDrawerOpen] = useState(false);
     const [selectedRowId, setSelectedRowId] = useState<number | null>(null);
-    const gridRef = useRef<AgGridReact>(null);
+    const gridRef = useRef<AgGridReact<Kit>>(null);
     const [auditRecords, setAuditRecords] = useState<AuditRecord[] | null>(null);
     const [isHistoryLoading, setIsHistoryLoading] = useState(false);
+    const [columnVisibility, setColumnVisibility] = useState<ColumnVisibility>({
+        partNumber: true,
+        noun: true,
+        kitName: true,
+        manufacturer: true,
+        stateStatus: true,
+        currentStatus: true,
+        remarks: true,
+        form48number: true,
+        dieRequired: true,
+        dieNumber: true,
+        shopName: true,
+        userName: true,
+        createdAt: true,
+        version: true,
+    });
 
     useEffect(() => {
         if (selectedRowId !== null) {
@@ -49,7 +72,6 @@ const GridComponent: React.FC<GridComponentProps> = ({
                 setIsHistoryLoading(true);
                 try {
                     const history = await getChangeHistory(selectedRowId);
-                    console.log(history);
                     setAuditRecords(history);
                 } catch (error) {
                     console.error("Error fetching history:", error);
@@ -63,40 +85,39 @@ const GridComponent: React.FC<GridComponentProps> = ({
         }
     }, [selectedRowId, getChangeHistory]);
 
-    // Memoize column definitions to prevent unnecessary re-renders
-    const columnDefs = useMemo(() => getKitColumnDefs((props: any) => (
-        <HistoryButtonRenderer
-            {...props}
-            setSelectedRowId={setSelectedRowId}
-            setIsDrawerOpen={setIsHistoryDrawerOpen}
-        />
-    ), !readOnly, !readOnly), [readOnly]);
-    // first is for editable and second is for history button
+    const handleVisibilityChange = (column: string, visible: boolean) => {
+        setColumnVisibility(prev => ({
+            ...prev,
+            [column]: visible,
+        }));
+    };
+
+    // Filter column definitions based on visibility
+    const filteredColumnDefs = useMemo(() => {
+        const allColumns = getKitColumnDefs((props: any) => (
+            <HistoryButtonRenderer
+                {...props}
+                setSelectedRowId={setSelectedRowId}
+                setIsDrawerOpen={setIsHistoryDrawerOpen}
+            />
+        ), !readOnly, !readOnly);
+
+        return allColumns.filter(col => col.field ? columnVisibility[col.field] : true);
+    }, [readOnly, columnVisibility]);
+
+    // Update the grid when column visibility changes
+    useEffect(() => {
+        if (gridRef.current && gridRef.current.api) {
+            // Correct way to set column definitions
+            gridRef.current.api.setGridOption('columnDefs', filteredColumnDefs);
+        }
+    }, [filteredColumnDefs]);
 
     const handleExport = () => {
         if (gridRef.current && gridRef.current.api) {
             gridRef.current.api.exportDataAsCsv({
                 fileName: 'kit-data-export.csv',
             });
-        }
-    };
-
-    // Create a wrapper for saveChanges that will notify the parent
-    const handleSaveChanges = async () => {
-        try {
-            const updatedRows = await originalSaveChanges();
-            // After saving, notify parent component with each individual updated row
-            if (onChangesSaved && updatedRows) {
-                // For each row that was updated
-                Object.keys(localChanges).forEach(rowId => {
-                    const rowIndex = updatedRows.findIndex(row => row.id === parseInt(rowId));
-                    if (rowIndex !== -1) {
-                        onChangesSaved(updatedRows[rowIndex], parseInt(rowId));
-                    }
-                });
-            }
-        } catch (error) {
-            console.error("Error saving changes:", error);
         }
     };
 
@@ -111,10 +132,29 @@ const GridComponent: React.FC<GridComponentProps> = ({
                     >
                         Export to CSV
                     </Button>
+                    <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                            <Button variant="outline" size="sm" className="ml-2">
+                                <SlidersHorizontal className="mr-2 h-4 w-4" />
+                                Columns
+                            </Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent align="end">
+                            {Object.keys(columnVisibility).map((column) => (
+                                <DropdownMenuCheckboxItem
+                                    key={column}
+                                    checked={columnVisibility[column]}
+                                    onCheckedChange={(checked) => handleVisibilityChange(column, checked)}
+                                >
+                                    {column}
+                                </DropdownMenuCheckboxItem>
+                            ))}
+                        </DropdownMenuContent>
+                    </DropdownMenu>
                     {!readOnly && (
                         <SaveChangesButton<Kit>
                             localChanges={localChanges}
-                            saveChanges={handleSaveChanges}
+                            saveChanges={saveChanges}
                         />
                     )}
                 </div>
@@ -126,10 +166,10 @@ const GridComponent: React.FC<GridComponentProps> = ({
                         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900"></div>
                     </div>
                 ) : (
-                    <AgGridReact
+                    <AgGridReact<Kit>
                         ref={gridRef}
-                        rowData={rowData}
-                        columnDefs={columnDefs}
+                        rowData={kitData}
+                        columnDefs={filteredColumnDefs}
                         onCellValueChanged={readOnly ? undefined : onCellValueChanged}
                         defaultColDef={{
                             editable: !readOnly,

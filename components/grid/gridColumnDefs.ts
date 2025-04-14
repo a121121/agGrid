@@ -140,11 +140,13 @@ export const getKitColumnDefs = (
             filter: true,
         },
     ];
+    // In getKitColumnDefs function
     if (showHistory) {
         baseColumns.push({
             headerName: "History",
             field: "version",
-            flex: 0,
+            width: 80, // Fixed width for the history column
+            maxWidth: 90, // Maximum allowed width
             sortable: true,
             filter: false,
             editable: false,
@@ -154,7 +156,9 @@ export const getKitColumnDefs = (
                 display: 'flex',
                 justifyContent: 'center',
                 alignItems: 'center',
+                padding: '0 8px', // Reduce padding to save space
             },
+            suppressSizeToFit: true, // Prevent auto-resizing
         });
     }
 

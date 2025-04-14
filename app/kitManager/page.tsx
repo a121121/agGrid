@@ -1,7 +1,8 @@
+// 📄 pages/KitManager.tsx
 'use client';
 
-import React, { useState, useEffect } from 'react';
-import { Grid as GridIcon, BarChart3 as ChartIcon, Calendar as DateIcon, History as HistoryIcon, DiffIcon } from 'lucide-react';
+import React from 'react';
+import { Grid as GridIcon, BarChart3 as ChartIcon, Calendar as DateIcon } from 'lucide-react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
@@ -10,94 +11,27 @@ import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover
 import { format } from 'date-fns';
 import GridComponent from '@/components/grid/GridComponent';
 import KitDashboardTable from '@/components/kitDashboardTable/KitDashboardTable';
-// import KitChangesComparison from '@/components/KiChangesCompv2';
-import { processKitData, FilterState } from '@/utils/processKitData';
-import { Kit } from '@/types/kit';
+import { KitProvider, useKitContext } from '@/context/kitContext';
 import "ag-grid-community/styles/ag-theme-alpine.css";
 
+const KitManagerContent: React.FC = () => {
+    const {
+        error,
+        loading,
+        isHistorical,
+        selectedDate,
+        fetchKits,
+        resetFilters,
+        filters,
+        processedData
+    } = useKitContext();
 
-const KitManager: React.FC = () => {
-    // State for all kits from database
-    const [kits, setKits] = useState<Kit[]>([]);
-    const [loading, setLoading] = useState<boolean>(true);
-    const [error, setError] = useState<string | null>(null);
-    // State for filtering
-    const [filters, setFilters] = useState<FilterState>({
-        categories: ['Total'],
-        statuses: ['All']
-    });
-    // State for date selection
-    const [selectedDate, setSelectedDate] = useState<Date>(new Date());
-    const [isHistorical, setIsHistorical] = useState<boolean>(false);
-    // Processed data based on filters
-    const [processedData, setProcessedData] = useState(() => processKitData(kits, filters));
-    // Fetch all current kit versions
-    useEffect(() => {
-        fetchKits();
-    }, []);
-    useEffect(() => {
-        setProcessedData(processKitData(kits, filters));
-    }, [kits, filters]);
-
-
-    const formatDateForApi = (date: Date): string => {
-        return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
-    };
-
-    const fetchKits = async (date?: Date) => {
-        setLoading(true);
-        setError(null);
-        try {
-            let url = '/api/kits';
-            if (date) {
-                // Format date correctly for API
-                const dateString = formatDateForApi(date);
-                url += `?date=${dateString}`;
-                setIsHistorical(true);
-            } else {
-                setIsHistorical(false);
-            }
-            // setLoading(true);
-            const response = await fetch(url);
-            if (!response.ok) throw new Error('Failed to fetch kits');
-            const data = await response.json();
-            setKits(data);
-        } catch (err) {
-            setError(err instanceof Error ? err.message : 'Unknown error occurred');
-        } finally {
-            setLoading(false);
-        }
-    };
-    // Update processed data when filters or kits change
-
-
-    // Reset filters
-    const handleResetFilters = () => {
-        setFilters({
-            categories: ['Total'],
-            statuses: ['All']
-        });
-    };
-
-    const handleChangesSaved = (updatedRow: Kit, rowId: number) => {
-        // Update only the specific row in the full dataset
-        setKits(prevKits => {
-            return prevKits.map(kit =>
-                kit.id === rowId ? updatedRow : kit
-            );
-        });
-    };
-
-
-    // Fetch data for a specific date
+    // Handlers
     const handleDateChange = (date: Date) => {
-        setSelectedDate(date);
         fetchKits(date);
     };
 
-    // Reset to current data
     const handleResetDate = () => {
-        setSelectedDate(new Date());
         fetchKits();
     };
 
@@ -107,19 +41,17 @@ const KitManager: React.FC = () => {
             headers: {
                 'Content-Type': 'application/json',
             }
-        }
-        );
+        });
         fetchKits();
-    }
-
+    };
 
     return (
         <div className="container mx-auto p-4 space-y-6">
             <div className="flex justify-between items-center">
                 <h1 className="text-2xl font-bold">JF-17 Kit Items Management System</h1>
-                <Button
-                    onClick={() => handleUploadCsv()}
-                >Hello Upload CSV from here</Button>
+                <Button onClick={handleUploadCsv}>
+                    Upload CSV from here
+                </Button>
                 <div className="flex gap-2">
                     <Popover>
                         <PopoverTrigger asChild>
@@ -147,7 +79,7 @@ const KitManager: React.FC = () => {
 
                     <Button
                         variant="outline"
-                        onClick={handleResetFilters}
+                        onClick={resetFilters}
                         disabled={filters.categories.length === 1 && filters.categories[0] === 'Total' && filters.statuses[0] === 'All'}
                     >
                         Reset Filters
@@ -210,7 +142,7 @@ const KitManager: React.FC = () => {
                         )}
                     </div>
                     <div className="mt-2 text-sm">
-                        Showing {processedData.filteredData.length} of {kits.length} kit items
+                        Showing {processedData.filteredData.length} of {processedData.totalSummary.total} kit items
                         {loading && <span className="ml-2 text-gray-500">(Loading...)</span>}
                     </div>
                 </CardContent>
@@ -239,31 +171,25 @@ const KitManager: React.FC = () => {
 
                     {/* Kit Status Table Tab Content */}
                     <TabsContent value="kit-table" className="mt-4">
-                        <KitDashboardTable
-                            totalSummary={processedData.totalSummary}
-                            kitBSummary={processedData.kitBSummary}
-                            kitCSummary={processedData.kitCSummary}
-                            kitC125Summary={processedData.kitC125Summary}
-                            statusBreakdown={processedData.statusBreakdown}
-                            filters={filters}
-                            setFilters={setFilters}
-                        />
+                        <KitDashboardTable />
                     </TabsContent>
 
                     {/* Grid View Tab Content */}
                     <TabsContent value="grid" className="mt-4">
-                        <GridComponent
-                            rowData={processedData.filteredData}
-                            readOnly={isHistorical}
-                            onChangesSaved={handleChangesSaved}
-                        />
+                        <GridComponent readOnly={isHistorical} />
                     </TabsContent>
-
-
                 </Tabs>
             )}
         </div>
-    )
-}
+    );
+};
 
-export default KitManager
+const KitManager: React.FC = () => {
+    return (
+        <KitProvider>
+            <KitManagerContent />
+        </KitProvider>
+    );
+};
+
+export default KitManager;

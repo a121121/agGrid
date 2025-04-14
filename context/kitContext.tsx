@@ -1,7 +1,7 @@
 // 📄 context/KitContext.tsx
 import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
-import { Kit, FilterState } from '@/types/kit';
-import { processKitData } from '@/utils/processKitData';
+import { Kit } from '@/types/kit';
+import { processKitData, FilterState } from '@/utils/processKitData';
 
 interface KitContextType {
     kits: Kit[];
@@ -13,7 +13,7 @@ interface KitContextType {
     processedData: ReturnType<typeof processKitData>;
 
     // Actions
-    setFilters: (filters: FilterState) => void;
+    setFilters: (filters: React.SetStateAction<FilterState>) => void;
     fetchKits: (date?: Date) => Promise<void>;
     updateKit: (kitId: number, updatedValues: Partial<Kit>, userName: string) => Promise<void>;
     resetFilters: () => void;
@@ -106,7 +106,7 @@ export const KitProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     // Fetch kits on initial load
     useEffect(() => {
         fetchKits();
-    }, []);
+    }, [fetchKits]);
 
     // Process data whenever kits or filters change
     useEffect(() => {

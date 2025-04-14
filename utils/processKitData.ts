@@ -1,15 +1,13 @@
-// 📄 lib/kitDataProcessor.ts
-//this is important for the summar table keep it as it is
+// 📄 utils/processKitData.ts
 import { Kit } from '@/types/kit';
 
-
 // Define types for the filter state
-export type KitCategoryFilter = 'Total' | 'Kit B' | 'Kit C' | 'Kit C 125';
-export type StateStatusFilter = 'All' | Kit['stateStatus'];
+export type KitCategoryFilter = 'Total' | string;
+export type StateStatusFilter = 'All' | string;
 
 export interface FilterState {
-    categories: KitCategoryFilter[];
-    statuses: StateStatusFilter[];
+    categories: string[];
+    statuses: string[];
 }
 
 export interface KitStatusSummary {
@@ -20,16 +18,16 @@ export interface KitStatusSummary {
 }
 
 export interface ProcessedKitData {
+    // Summary for all kits and by kit type
     totalSummary: KitStatusSummary;
-    kitBSummary: KitStatusSummary;
-    kitCSummary: KitStatusSummary;
-    kitC125Summary: KitStatusSummary;
-    statusBreakdown: Record<Kit['stateStatus'], {
+    kitSummaries: Record<string, KitStatusSummary>;
+
+    // Status breakdown
+    statusBreakdown: Record<string, {
         total: KitStatusSummary;
-        kitB: KitStatusSummary;
-        kitC: KitStatusSummary;
-        kitC125: KitStatusSummary;
+        byKit: Record<string, KitStatusSummary>;
     }>;
+
     // Filtered data based on current selection
     filteredData: Kit[];
 }
@@ -41,60 +39,41 @@ export function processKitData(
     kits: Kit[],
     filters: FilterState
 ): ProcessedKitData {
-    // Initialize the data structure
-    const allStatuses: Kit['stateStatus'][] = [
-        'Form 17 Pending',
-        'Under Indegenization',
-        'Part Under TF',
-        'Die Under TF',
-        'Part Trial Testing',
-        'MCL',
-        'Under Sourcing',
-        'Sourcing Completed',
-        'Beyond Capability'
-    ];
+    // Get unique kit types from the data
+    const kitTypes = Array.from(new Set(kits.map(kit => kit.kitName)));
 
-    // Initialize the status breakdown structure
-    const statusBreakdown: Record<Kit['stateStatus'], {
+    // Get unique statuses from the data
+    const allStatuses = Array.from(new Set(kits.map(kit => kit.stateStatus)));
+
+    // Initialize summaries
+    const kitSummaries: Record<string, KitStatusSummary> = {};
+    const statusBreakdown: Record<string, {
         total: KitStatusSummary;
-        kitB: KitStatusSummary;
-        kitC: KitStatusSummary;
-        kitC125: KitStatusSummary;
-    }> = {} as any;
+        byKit: Record<string, KitStatusSummary>;
+    }> = {};
 
-    // Initialize with empty summaries
-    allStatuses.forEach(status => {
-        statusBreakdown[status] = {
-            total: createEmptySummary(),
-            kitB: createEmptySummary(),
-            kitC: createEmptySummary(),
-            kitC125: createEmptySummary()
-        };
+    // Calculate total summary
+    const totalSummary = calculateSummary(kits);
+
+    // Calculate summaries for each kit type
+    kitTypes.forEach(kitType => {
+        const kitsOfType = kits.filter(kit => kit.kitName === kitType);
+        kitSummaries[kitType] = calculateSummary(kitsOfType);
     });
 
-    // Get kits by type
-    const kitBItems = kits.filter(kit => kit.kitName === 'Kit B');
-    const kitCItems = kits.filter(kit => kit.kitName === 'Kit C');
-    const kitC125Items = kits.filter(kit => kit.kitName === 'Kit C 125');
-
-    // Calculate total summaries
-    const totalSummary = calculateSummary(kits);
-    const kitBSummary = calculateSummary(kitBItems);
-    const kitCSummary = calculateSummary(kitCItems);
-    const kitC125Summary = calculateSummary(kitC125Items);
-
-    // Calculate breakdown by status
+    // Initialize and calculate status breakdown
     allStatuses.forEach(status => {
-        const totalWithStatus = kits.filter(kit => kit.stateStatus === status);
-        const kitBWithStatus = kitBItems.filter(kit => kit.stateStatus === status);
-        const kitCWithStatus = kitCItems.filter(kit => kit.stateStatus === status);
-        const kitC125WithStatus = kitC125Items.filter(kit => kit.stateStatus === status);
+        const kitsWithStatus = kits.filter(kit => kit.stateStatus === status);
+
+        const byKit: Record<string, KitStatusSummary> = {};
+        kitTypes.forEach(kitType => {
+            const kitsOfTypeWithStatus = kitsWithStatus.filter(kit => kit.kitName === kitType);
+            byKit[kitType] = calculateSummary(kitsOfTypeWithStatus);
+        });
 
         statusBreakdown[status] = {
-            total: calculateSummary(totalWithStatus),
-            kitB: calculateSummary(kitBWithStatus),
-            kitC: calculateSummary(kitCWithStatus),
-            kitC125: calculateSummary(kitC125WithStatus)
+            total: calculateSummary(kitsWithStatus),
+            byKit
         };
     });
 
@@ -103,40 +82,10 @@ export function processKitData(
 
     return {
         totalSummary,
-        kitBSummary,
-        kitCSummary,
-        kitC125Summary,
+        kitSummaries,
         statusBreakdown,
         filteredData
     };
-}
-
-/**
- * Apply filters to the kit data
- */
-function applyFilters(kits: Kit[], filters: FilterState): Kit[] {
-    let result = [...kits];
-
-    // Filter by kit categories
-    if (filters.categories.length > 0 && !filters.categories.includes('Total')) {
-        result = result.filter(kit => {
-            return filters.categories.some(category => {
-                if (category === 'Kit B') return kit.kitName === 'Kit B';
-                if (category === 'Kit C') return kit.kitName === 'Kit C';
-                if (category === 'Kit C 125') return kit.kitName === 'Kit C 125';
-                return false;
-            });
-        });
-    }
-
-    // Filter by statuses
-    if (filters.statuses.length > 0 && !filters.statuses.includes('All')) {
-        result = result.filter(kit => {
-            return filters.statuses.includes(kit.stateStatus as StateStatusFilter);
-        });
-    }
-
-    return result;
 }
 
 /**
@@ -157,13 +106,20 @@ function calculateSummary(kits: Kit[]): KitStatusSummary {
 }
 
 /**
- * Create an empty summary object
+ * Apply filters to the kit data
  */
-function createEmptySummary(): KitStatusSummary {
-    return {
-        total: 0,
-        mclCount: 0,
-        mclPercentage: 0,
-        nonMclPercentage: 0
-    };
+function applyFilters(kits: Kit[], filters: FilterState): Kit[] {
+    let result = [...kits];
+
+    // Filter by kit categories
+    if (filters.categories.length > 0 && !filters.categories.includes('Total')) {
+        result = result.filter(kit => filters.categories.includes(kit.kitName));
+    }
+
+    // Filter by statuses
+    if (filters.statuses.length > 0 && !filters.statuses.includes('All')) {
+        result = result.filter(kit => filters.statuses.includes(kit.stateStatus));
+    }
+
+    return result;
 }
