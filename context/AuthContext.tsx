@@ -1,57 +1,71 @@
-// context/AuthContext.tsx
-import React, { createContext, useState, useContext, useEffect, ReactNode } from 'react';
-import { useRouter } from 'next/router';
+// app/context/AuthContext.tsx
+'use client';
 
-// You can change these values or store them in a more secure way
-const DUMMY_USERNAME = 'admin';
-const DUMMY_PASSWORD = 'admin123';
+import { createContext, useContext, useEffect, useState, ReactNode } from 'react';
+import { useSession, signIn, signOut } from "next-auth/react";
+import { useRouter } from 'next/navigation';
 
-type AuthContextType = {
-    isAuthenticated: boolean;
-    login: (username: string, password: string) => boolean;
-    logout: () => void;
+interface AuthContextType {
+    user: any | null;
     loading: boolean;
-};
+    login: (username: string, password: string) => Promise<any>;
+    logout: () => Promise<void>;
+    isAuthenticated: boolean;
+}
 
-const AuthContext = createContext<AuthContextType>({
-    isAuthenticated: false,
-    login: () => false,
-    logout: () => { },
-    loading: true,
-});
+const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-export const AuthProvider = ({ children }: { children: ReactNode }) => {
-    const [isAuthenticated, setIsAuthenticated] = useState(false);
+export function AuthProvider({ children }: { children: ReactNode }) {
+    const { data: session, status } = useSession();
+    const [user, setUser] = useState<any | null>(null);
     const [loading, setLoading] = useState(true);
     const router = useRouter();
 
     useEffect(() => {
-        // Check if user is authenticated on app startup
-        const authStatus = sessionStorage.getItem('isAuthenticated');
-        setIsAuthenticated(authStatus === 'true');
-        setLoading(false);
-    }, []);
-
-    const login = (username: string, password: string) => {
-        if (username === DUMMY_USERNAME && password === DUMMY_PASSWORD) {
-            setIsAuthenticated(true);
-            sessionStorage.setItem('isAuthenticated', 'true');
-            return true;
+        if (status === 'loading') {
+            setLoading(true);
+        } else {
+            setUser(session?.user || null);
+            setLoading(false);
         }
-        return false;
+    }, [session, status]);
+
+    const login = async (username: string, password: string) => {
+        const result = await signIn('credentials', {
+            redirect: false,
+            username,
+            password,
+        });
+
+        if (!result?.error) {
+            router.refresh(); // Refresh to update session
+        }
+
+        return result;
     };
 
-    const logout = () => {
-        setIsAuthenticated(false);
-        sessionStorage.removeItem('isAuthenticated');
-        router.push('/login');
+    const logout = async () => {
+        await signOut({ redirect: false });
+        setUser(null);
+        router.push('/auth/signin');
+        router.refresh();
     };
 
-    return (
-        <AuthContext.Provider value={{ isAuthenticated, login, logout, loading }}>
-            {children}
-        </AuthContext.Provider>
-    );
+    const value = {
+        user,
+        loading,
+        login,
+        logout,
+        isAuthenticated: !!user,
+    };
+
+    return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
+}
+
+export const useAuth = () => {
+    const context = useContext(AuthContext);
+    if (context === undefined) {
+        throw new Error('useAuth must be used within an AuthProvider');
+    }
+    return context;
 };
-
-export const useAuth = () => useContext(AuthContext);

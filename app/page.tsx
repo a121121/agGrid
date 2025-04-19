@@ -13,6 +13,10 @@ import GridComponent from '@/components/grid/GridComponent';
 import KitDashboardTable from '@/components/kitDashboardTable/KitDashboardTable';
 import { KitProvider, useKitContext } from '@/context/kitContext';
 import "ag-grid-community/styles/ag-theme-alpine.css";
+import ProtectedRoute from '@/components/ProtectedRoute';
+import { useAuth } from '../context/AuthContext';
+import UserInfo from '@/components/userInfo';
+import { Toaster } from '@/components/ui/toaster';
 
 const KitManagerContent: React.FC = () => {
   const {
@@ -26,6 +30,8 @@ const KitManagerContent: React.FC = () => {
     processedData
   } = useKitContext();
 
+
+  const { user, logout } = useAuth();
   // Handlers
   const handleDateChange = (date: Date) => {
     fetchKits(date);
@@ -47,6 +53,7 @@ const KitManagerContent: React.FC = () => {
 
   return (
     <div className="container mx-auto p-4 space-y-6">
+
       <div className="flex justify-between items-center">
         <h1 className="text-2xl font-bold">JF-17 Kit Items Management System</h1>
         <Button onClick={handleUploadCsv}>
@@ -85,6 +92,10 @@ const KitManagerContent: React.FC = () => {
             Reset Filters
           </Button>
         </div>
+        <UserInfo
+          username={user.name}
+          onLogout={logout}
+        />
       </div>
 
       {/* Error message */}
@@ -186,9 +197,10 @@ const KitManagerContent: React.FC = () => {
 
 const KitManager: React.FC = () => {
   return (
-    <KitProvider>
+    <ProtectedRoute>
       <KitManagerContent />
-    </KitProvider>
+      <Toaster />
+    </ProtectedRoute>
   );
 };
 
