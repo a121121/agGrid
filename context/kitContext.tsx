@@ -67,7 +67,7 @@ export const KitProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     }, []);
 
     // Update kit data
-    const updateKit = useCallback(async (kitId: number, updatedValues: Partial<Kit>, userName: string) => {
+    const updateKit = useCallback(async (kitId: number, updatedValues: Partial<Kit>, username: string) => {
         setLoading(true);
         setError(null);
         try {
@@ -78,7 +78,7 @@ export const KitProvider: React.FC<{ children: React.ReactNode }> = ({ children 
                 },
                 body: JSON.stringify({
                     updatedValues,
-                    userName
+                    username
                 }),
             });
 

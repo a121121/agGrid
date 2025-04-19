@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { KitService } from '@/utils/kit-service';
 
-// Update a kit
+// Update a specific kit
 export async function PUT(
     request: NextRequest,
     { params }: { params: { id: string } }
@@ -16,10 +16,10 @@ export async function PUT(
         const body = await request.json();
 
         // In a real app, you would get the current user ID from the session
-        const userName = body.userName || "bawa Qadra"; // Default to first user for demo
+        const username = body.username; // Default to first user for demo
         const updatedValues = body.updatedValues;
 
-        const result = await kitService.updateKit(parseInt(id), updatedValues, userName);
+        const result = await kitService.updateKit(parseInt(id), updatedValues, username);
         return NextResponse.json(result);
     } catch (error) {
         console.error(`Error updating kit ${params.id}:`, error);

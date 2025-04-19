@@ -17,6 +17,7 @@ import { useKitContext } from '@/context/kitContext';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuCheckboxItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { SlidersHorizontal, Plus } from 'lucide-react';
 import AddKitModal from './AddKitModal';
+import { useAuth } from '@/context/AuthContext';
 
 // Register modules once
 registerAgGridModules();
@@ -44,6 +45,7 @@ const GridComponent: React.FC<GridComponentProps> = ({
         getChangeHistory
     } = useChangeTracking<Kit>();
 
+    const { user } = useAuth();
     const [isHistoryDrawerOpen, setIsHistoryDrawerOpen] = useState(false);
     const [isAddKitModalOpen, setIsAddKitModalOpen] = useState(false);
     const [selectedRowId, setSelectedRowId] = useState<number | null>(null);
@@ -169,7 +171,7 @@ const GridComponent: React.FC<GridComponentProps> = ({
                     {!readOnly && (
                         <SaveChangesButton<Kit>
                             localChanges={localChanges}
-                            saveChanges={saveChanges}
+                            saveChanges={() => saveChanges(user.name)}
                         />
                     )}
                 </div>

@@ -40,7 +40,7 @@ export class KitService {
      * @param updates Partial Kit object containing fields to update
      * @param userName User making the change
      */
-    async updateKit(kitId: number, updates: Partial<Kit>, userName: string): Promise<Kit> {
+    async updateKit(kitId: number, updates: Partial<Kit>, username: string): Promise<Kit> {
         // Start a transaction
         return await prisma.$transaction(async (tx) => {
             // 1. Get current kit version
@@ -74,7 +74,7 @@ export class KitService {
                     ...currentKit, // baki sb cheezain purani lo
                     ...updates, // change yahan se lo
                     id: undefined, // Let Prisma auto-generate
-                    userName, // Make sure userName is passed correctly
+                    userName: username, // Make sure userName is passed correctly
                     version: newVersion,
                     createdAt: changeTime,
                     validUntil: new Date('9999-12-31T23:59:59')
@@ -94,7 +94,7 @@ export class KitService {
                     await tx.auditLog.create({
                         data: {
                             kitId: currentKit.originalKitId,
-                            userName,
+                            userName: username,
                             version: newVersion,
                             field: field.toString(), // Convert the field key to a string
                             oldValue: JSON.stringify(oldValue),

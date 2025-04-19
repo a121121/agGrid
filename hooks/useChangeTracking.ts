@@ -3,9 +3,9 @@ import { useState, useCallback } from 'react';
 import { CellValueChangedEvent } from 'ag-grid-community';
 import { Kit } from '@/types/kit';
 import { useKitContext } from '@/context/kitContext';
+// import { useAuth } from '@/context/AuthContext';
 
 // Mock user ID - in a real app, get this from your auth system
-const userName = "bawa Qadra";
 
 export const useChangeTracking = <T extends Kit>() => {
     const { kits, updateKit } = useKitContext();
@@ -33,7 +33,7 @@ export const useChangeTracking = <T extends Kit>() => {
         }
     }, []);
 
-    const saveChanges = useCallback(async () => {
+    const saveChanges = useCallback(async (username: string) => {
         if (Object.keys(localChanges).length === 0) {
             alert('No changes to save!');
             return;
@@ -51,9 +51,9 @@ export const useChangeTracking = <T extends Kit>() => {
                 const updatedValues = Object.fromEntries(
                     changes.map(change => [change.field, change.newValue])
                 );
-
-                // Use the context's updateKit function
-                await updateKit(parseInt(rowId), updatedValues, userName);
+                console.log(username);
+                // Use the context's updateKit function with the username
+                await updateKit(parseInt(rowId), updatedValues, username);
             }
 
             // Clear local changes

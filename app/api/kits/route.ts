@@ -4,7 +4,7 @@ import prisma from '@/db'
 import { KitService } from '@/utils/kit-service';
 import importCsv from '@/utils/csvParser';
 
-
+// it will get us all valid kits at a particular date or all valid kits today
 export async function GET(request: NextRequest) {
     try {
         const kitService = new KitService();
@@ -39,7 +39,7 @@ export async function GET(request: NextRequest) {
         return NextResponse.json({ error: 'Failed to fetch kits' }, { status: 500 });
     }
 }
-
+// This is just a temporary function to import kits from a csv file
 export async function PUT(
     request: NextRequest
 ) {
@@ -58,7 +58,6 @@ export async function PUT(
         );
     }
 }
-
 // Create a new kit
 export async function POST(request: NextRequest) {
     try {
