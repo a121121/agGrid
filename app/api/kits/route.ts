@@ -39,25 +39,8 @@ export async function GET(request: NextRequest) {
         return NextResponse.json({ error: 'Failed to fetch kits' }, { status: 500 });
     }
 }
-// This is just a temporary function to import kits from a csv file
-export async function PUT(
-    request: NextRequest
-) {
-    try {
-        importCsv()
-            .catch((error) => {
-                console.error('Import failed:', error);
-                process.exit(1);
-            });
-        return NextResponse.json({ body: 'Upload Successful' })
-    } catch (error) {
-        console.error(`Error updating kit `, error);
-        return NextResponse.json(
-            { error: 'Failed to update kit' },
-            { status: 500 }
-        );
-    }
-}
+
+
 // Create a new kit
 export async function POST(request: NextRequest) {
     try {

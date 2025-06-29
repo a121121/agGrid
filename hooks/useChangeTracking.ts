@@ -3,6 +3,7 @@ import { useState, useCallback } from 'react';
 import { CellValueChangedEvent } from 'ag-grid-community';
 import { Kit } from '@/types/kit';
 import { useKitContext } from '@/context/kitContext';
+import { toast } from 'sonner';
 // import { useAuth } from '@/context/AuthContext';
 
 // Mock user ID - in a real app, get this from your auth system
@@ -35,7 +36,7 @@ export const useChangeTracking = <T extends Kit>() => {
 
     const saveChanges = useCallback(async (username: string) => {
         if (Object.keys(localChanges).length === 0) {
-            alert('No changes to save!');
+            toast.error('No changes to save!');
             return;
         }
 
@@ -58,11 +59,11 @@ export const useChangeTracking = <T extends Kit>() => {
 
             // Clear local changes
             setLocalChanges({});
-            alert('Changes saved successfully!');
+            toast.success('Changes saved successfully!');
         } catch (err) {
             console.error('Error saving changes:', err);
             setError(err instanceof Error ? err.message : 'Unknown error occurred');
-            alert(`Error saving changes: ${err instanceof Error ? err.message : 'Unknown error'}`);
+            toast.error(`Error saving changes: ${err instanceof Error ? err.message : 'Unknown error'}`);
         } finally {
             setIsLoading(false);
         }

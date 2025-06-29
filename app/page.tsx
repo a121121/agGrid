@@ -5,20 +5,25 @@ import React from 'react';
 import { Grid as GridIcon, BarChart3 as ChartIcon, Calendar as DateIcon } from 'lucide-react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Button } from '@/components/ui/button';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Card, CardContent } from '@/components/ui/card';
 import { Calendar } from '@/components/ui/calendar';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { format } from 'date-fns';
 import GridComponent from '@/components/grid/GridComponent';
 import KitDashboardTable from '@/components/kitDashboardTable/KitDashboardTable';
-import { KitProvider, useKitContext } from '@/context/kitContext';
+import { useKitContext } from '@/context/kitContext';
 import "ag-grid-community/styles/ag-theme-alpine.css";
 import ProtectedRoute from '@/components/ProtectedRoute';
 import { useAuth } from '../context/AuthContext';
 import UserInfo from '@/components/userInfo';
-import { Toaster } from '@/components/ui/toaster';
+// import { Toaster } from '@/components/ui/toaster';
+import { Toaster } from 'sonner';
+import CsvImportComponent from '@/components/CsvImportComponent';
+import { useState } from 'react';
 
 const KitManagerContent: React.FC = () => {
+  const [showImportDialog, setShowImportDialog] = useState(false);
   const {
     error,
     loading,
@@ -41,14 +46,9 @@ const KitManagerContent: React.FC = () => {
     fetchKits();
   };
 
-  const handleUploadCsv = async () => {
-    const response = await fetch(`/api/kits/`, {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
-      }
-    });
-    fetchKits();
+  const handleImportComplete = () => {
+    setShowImportDialog(false);
+    fetchKits(); // Your existing function to refresh the kit list
   };
 
   return (
@@ -56,9 +56,21 @@ const KitManagerContent: React.FC = () => {
 
       <div className="flex justify-between items-center">
         <h1 className="text-2xl font-bold">JF-17 Kit Items Management System</h1>
-        <Button onClick={handleUploadCsv}>
-          Upload CSV from here
-        </Button>
+        {user.role === 'admin' &&
+          <Dialog open={showImportDialog} onOpenChange={setShowImportDialog}>
+            <DialogTrigger asChild>
+              <Button>
+                Import CSV Data
+              </Button>
+            </DialogTrigger>
+            <DialogContent className="max-w-7xl max-h-[90vh] overflow-y-auto">
+              <DialogHeader>
+                <DialogTitle>Import Kit Data</DialogTitle>
+              </DialogHeader>
+              <CsvImportComponent onImportComplete={handleImportComplete} />
+            </DialogContent>
+          </Dialog>
+        }
         <div className="flex gap-2">
           <Popover>
             <PopoverTrigger asChild>
