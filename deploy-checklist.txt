@@ -1,0 +1,59 @@
+
+✅ LOCAL SERVER DEPLOYMENT CHECKLIST (Next.js + Prisma + MySQL)
+
+STEP 1: Install Dependencies
+----------------------------
+- Install Node.js (https://nodejs.org)
+- Install npm (comes with Node)
+- Install MySQL Server (8.x recommended)
+- (Optional) Install pm2 for keeping app alive: npm install -g pm2
+
+STEP 2: Copy Your Project Folder to the Server
+---------------------------------------------
+- Copy the full app directory via USB, LAN share, or Git
+- Make sure to include `.env`, `prisma/schema.prisma`, `package.json`, etc.
+
+STEP 3: Install Node Modules
+----------------------------
+cd your-project-folder
+npm install
+
+STEP 4: Create MySQL Database
+-----------------------------
+mysql -u root -p
+
+-- Inside MySQL shell:
+CREATE DATABASE your_app_db;
+
+STEP 5: Configure Environment Variables
+---------------------------------------
+- Open `.env` in your project
+- Update DATABASE_URL:
+
+DATABASE_URL="mysql://root:yourPassword@localhost:3306/your_app_db"
+
+STEP 6: Push Prisma Schema to MySQL
+-----------------------------------
+npx prisma db push
+
+STEP 7: Seed Admin User (Optional)
+----------------------------------
+npx ts-node prisma/seed-admin.ts
+
+STEP 8: Build the App
+---------------------
+npm run build
+
+STEP 9: Start the App
+---------------------
+npm run start
+
+# Optional (Production)
+NODE_ENV=production npm run start
+
+# Optional (Use pm2 for auto-restart)
+pm2 start npm --name your-app -- run start
+pm2 save
+pm2 startup
+
+Done ✅

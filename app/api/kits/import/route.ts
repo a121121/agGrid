@@ -53,10 +53,10 @@ async function clearExistingData() {
     await prisma.kit.deleteMany();
     console.log('Deleted all kits');
 
-    // Reset SQLite auto-increment counters
-    await prisma.$executeRaw`DELETE FROM sqlite_sequence WHERE name='Kit'`;
-    await prisma.$executeRaw`DELETE FROM sqlite_sequence WHERE name='AuditLog'`;
-    console.log('Reset SQLite auto-increment counters');
+    // Reset MySQL auto-increment counters
+    await prisma.$executeRawUnsafe(`ALTER TABLE Kit AUTO_INCREMENT = 1`);
+    await prisma.$executeRawUnsafe(`ALTER TABLE AuditLog AUTO_INCREMENT = 1`);
+    console.log('Reset MySQL auto-increment counters');
 }
 
 export async function POST(request: NextRequest) {
@@ -106,14 +106,13 @@ export async function POST(request: NextRequest) {
                 });
                 successCount += result.count;
 
-                // Get the IDs of the created records for this batch
-                // Since we cleared data and reset counters, IDs will be sequential
-                const startId = i + 1; // Assuming auto-increment starts from 1
-                const endId = startId + batch.length - 1;
-                for (let id = startId; id <= endId; id++) {
-                    createdKitIds.push(id);
-                }
+                // Fetch created IDs if needed (MySQL does not guarantee sequential IDs)
+                const createdKits = await prisma.kit.findMany({
+                    orderBy: { id: 'desc' },
+                    take: batch.length,
+                });
 
+                createdKitIds.push(...createdKits.map(kit => kit.id));
             } else {
                 // For non-clearing imports, handle duplicates manually and collect IDs
                 for (const item of batch) {
@@ -134,18 +133,15 @@ export async function POST(request: NextRequest) {
         }
 
         // Update originalKitId for all newly created kits
-        // Set originalKitId to match the kit's own ID
         console.log('Updating originalKitId for imported kits...');
 
         if (clearExisting) {
-            // If we cleared existing data, update all kits where originalKitId is -1
-            await prisma.$executeRaw`
+            await prisma.$executeRawUnsafe(`
                 UPDATE Kit 
                 SET originalKitId = id 
                 WHERE originalKitId = -1
-            `;
+            `);
         } else {
-            // For non-clearing imports, update only the specific kits we created
             for (const kitId of createdKitIds) {
                 await prisma.kit.update({
                     where: { id: kitId },

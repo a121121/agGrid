@@ -11,7 +11,8 @@
     "createAdmin": "ts-node prisma/seed-admin.ts"
   },
   "prisma": {
-    "seed": "ts-node --compiler-options {\"module\":\"CommonJS\"} prisma/seed.ts"
+    "seed": "ts-node --compiler-options {\"module\":\"CommonJS\"} prisma/seed-admin.ts",
+    "seedAdmin": "ts-node --compiler-options {\"module\":\"CommonJS\"} prisma/seed-admin.ts"
   },
   "dependencies": {
     "@emotion/react": "^11.14.0",
